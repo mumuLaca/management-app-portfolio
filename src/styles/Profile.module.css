@@ -1,0 +1,163 @@
+.header {
+  color: #fff;
+  background-color: var(--header-color);
+  height: var(--navbar-height);
+}
+
+.mainComponent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.topItems {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px 5px 3px;
+  align-items: center;
+}
+
+.iconImage {
+  border: 2px solid var(--header-color);
+  border-radius: 10%;
+}
+
+.employeeInfo {
+  width: 100%;
+  position: relative;
+  margin-top: 25px;
+}
+
+.employeeInfo input,
+.employeeInfo label {
+  transition: all 0.5s ease;
+}
+
+.employeeInfo p {
+  outline: none;
+  width: 100%;
+  border: none;
+  font-size: 20px;
+  border-bottom: 2px solid silver;
+  margin-top: 5px;
+  padding-left: 20px;
+  cursor: default;
+  background: #fff;
+}
+
+.employeeInfo label {
+  font-weight: bold;
+}
+
+.underline {
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  bottom: 0;
+  background: #0d6efd;
+  transition: all 0.5s ease;
+}
+
+.underlineBefore {
+  transform: scaleX(0);
+}
+
+.underlineAfter {
+  transform: scaleX(1);
+}
+
+.editOn {
+  outline: none;
+  width: 100%;
+  border: none;
+  font-size: 20px;
+  border-bottom: 2px solid silver;
+  margin-top: 5px;
+  padding-left: 20px;
+  cursor: auto;
+  background: #fff;
+}
+
+.editOff {
+  outline: none;
+  width: 100%;
+  border: none;
+  font-size: 20px;
+  border-bottom: 2px solid silver;
+  margin-top: 5px;
+  padding-left: 20px;
+  cursor: default;
+  background: #fff;
+}
+
+.editOnFontColor {
+  color: #0d6efd;
+}
+
+.buttonUpdate {
+  margin: 15% 0 10% 0;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.buttonUpdateHidden {
+  display: none;
+}
+
+.buttonUpdateHidden {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.buttonUpdateShow {
+  opacity: 1;
+}
+
+.regularTimeBox {
+  margin-top: 2%;
+  width: 100%;
+  display: flex;
+  text-align: center;
+}
+
+.regularTime {
+  background-color: #fff;
+  outline: none;
+  width: 100%;
+  height: 40px;
+  border: none;
+  text-align: center;
+}
+
+.timeEdit {
+  position: relative;
+  outline: none;
+  width: 50%;
+  border: none;
+  font-size: 20px;
+  background: #fff;
+}
+
+.timeEditOn {
+  cursor: text;
+}
+
+.timeEditOff {
+  cursor: auto;
+}
+
+.timeUnderline {
+  position: absolute;
+  top: 40px;
+  height: 2px;
+  width: 100%;
+  bottom: 0;
+  background: #0d6efd;
+  transition: all 0.5s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .offCanvasLayout {
+    width: 100% !important;
+  }
+}

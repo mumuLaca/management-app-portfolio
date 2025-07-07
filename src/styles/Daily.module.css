@@ -1,0 +1,184 @@
+/* ========== List.tsx ========== */
+.tableContainer {
+  overflow-x: "auto";
+  width: "100%";
+  margin-top: "2%";
+  padding: 0;
+}
+
+.tableRow {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.thDay,
+.tdDay {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.tdDay {
+  border-top: 1px solid rgb(222, 226, 229) !important;
+}
+
+.tableHeader > th {
+  background-color: var(--header-color);
+  color: white;
+  text-align: center;
+}
+
+/* ========== AllEntry.tsx ========== */
+.accordion {
+  max-width: 100%;
+  margin-bottom: 20px;
+}
+
+.accordion .contentBox {
+  position: relative;
+}
+
+.titleArea {
+  cursor: pointer;
+}
+
+.AllEntryBar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.accordion .contentBox .label {
+  position: relative;
+  padding: 5px;
+  color: var(--header-color);
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.accordion .contentBox .arrow {
+  position: absolute;
+  font-size: 33px;
+  font-weight: bold;
+  right: 20px;
+  color: var(--header-color);
+  transition: transform 0.6s ease;
+  transform-origin: center;
+}
+
+.accordion .contentBox.active .arrow {
+  transform: rotate(-180deg);
+}
+
+.accordion .contentBox .content {
+  margin-top: 10px;
+  padding: 0 10px;
+  position: relative;
+  background: #fff;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  overflow-y: hidden;
+  border-bottom: 1px solid var(--header-color);
+}
+
+.accordion .contentBox.active .content {
+  padding: 0 10px;
+  max-height: 5em;
+}
+
+.allEntry {
+  height: 30px;
+  padding-top: 8px;
+  display: flex;
+  overflow: hidden;
+  transition: width 0.6s ease;
+}
+
+.cardClose {
+  width: 0px;
+}
+
+.cardOpen {
+  width: 50%;
+}
+
+.allEntryButtonCol,
+.forcedEntryButtonCol {
+  margin-top: 2%;
+}
+
+@media screen and (min-width: 992px) {
+  .allEntry {
+    height: 28px;
+    padding-top: 7px;
+  }
+
+  .annotation1 {
+    padding-top: 1px;
+    font-size: 13px;
+  }
+
+  .allEntryButtonCol,
+  .forcedEntryButtonCol {
+    margin-top: 3%;
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 991px) {
+  .allEntry {
+    height: 28px;
+    padding-top: 7px;
+  }
+
+  .annotation1 {
+    padding-top: 4px;
+    font-size: 11px;
+  }
+
+  .accordion .contentBox.active .content {
+    max-height: 20em;
+  }
+
+  .allEntryButtonCol,
+  .forcedEntryButtonCol {
+    margin-top: 4.5%;
+  }
+
+  .cardOpen {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .accordion .contentBox .arrow {
+    font-size: 26px;
+  }
+
+  .accordion .contentBox .label {
+    font-size: 20px;
+  }
+
+  .allEntry {
+    height: 40px;
+  }
+
+  .annotation1 {
+    font-size: 11px;
+  }
+
+  .accordion .contentBox.active .content {
+    max-height: 20em;
+  }
+
+  .allEntryButtonCol,
+  .forcedEntryButtonCol {
+    margin-bottom: 3%;
+  }
+}
+
+/* ========== Summary.tsx ========== */
+.totalColor {
+  color: var(--header-color);
+}

@@ -1,0 +1,55 @@
+.container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--header-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loginBox {
+  background-color: #fff;
+  min-width: 254px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  border: 1px solid #d0d7de;
+  text-align: center;
+}
+
+.loginTitle {
+  margin-top: 16px;
+  color: var(--header-color);
+  font-size: 24px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 30px;
+  padding: 16px;
+}
+
+.loginButton {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.loginButton > span {
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.loginButton:hover {
+  color: #fff;
+}
+
+.slackIcon {
+  margin: 5px;
+}

@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// 社員情報TBL
+model Employee {
+  id                  Int      @id
+  email               String   @unique
+  name                String
+  section             String
+  admin               String   @default("0")
+  startTime           String   @default("09:00")
+  endTime             String   @default("18:00")
+  basicWorkStyle      String   @default("1")
+  createdAt           DateTime @default(now()) @db.Timestamp(0)
+  updatedAt           DateTime @updatedAt @db.Timestamp(0)
+  dailyReport DailyReport[]
+  settlement Settlement[]
+  settlementPattern SettlementPattern[]
+  approval Approval[]
+  reimbursement Reimbursement[]
+
+  @@map("Employee")
+}
+
+// 勤務表TBL
+model DailyReport {
+  employeeId Int
+  date       DateTime  @db.Date
+  startTime  DateTime? @db.Time
+  endTime    DateTime? @db.Time
+  rest       Float?    @db.Float
+  workStyle  String?   @default("0") @db.Char(1)
+  note       String?   
+  absentCode String    @default("000") @db.Char(3)
+  createdAt  DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt  DateTime  @updatedAt @db.Timestamp(0)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId, date])
+  @@map("DailyReport")
+}
+
+// 旅費精算表TBL
+model Settlement {
+  employeeId      Int
+  tno             Int @unique @default(autoincrement())
+  displayNo       Int
+  date            DateTime  @db.Date
+  form            String
+  method          String
+  departure       String
+  arrival         String?
+  transportation  String?
+  cost            Int
+  total           Int
+  note            String? 
+  createdAt       DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime  @updatedAt @db.Timestamp(0)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId, tno])
+  @@map("Settlement")
+}
+
+// 承認状況TBL
+model Approval {
+  employeeId            Int       // 社員ID
+  yearMonth             String    // 対象年月
+  totalActive           Decimal   @default(0) // 総稼働時間（月）
+  statusOfDailyReport   String    // 承認状況（勤務表）
+  statusOfSettlement    String    // 承認状況（旅費精算表）
+  statusOfReimbursement String    // 承認状況（立替精算表）
+  createdAt             DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt             DateTime  @updatedAt @db.Timestamp(0)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId, yearMonth])
+  @@map("Approval")
+}
+
+// 旅費精算表パターンTBL
+model SettlementPattern {
+  employeeId      Int
+  tno             Int @unique @default(autoincrement())
+  title           String
+  form            String
+  method          String
+  departure       String
+  arrival         String?
+  transportation  String?
+  cost            Int
+  note            String? 
+  createdAt       DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime  @updatedAt @db.Timestamp(0)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId, tno])
+  @@map("SettlementPattern")
+}
+
+// 立替精算表
+model Reimbursement {
+  employeeId      Int
+  tno             Int @unique @default(autoincrement())
+  yearMonth       String 
+  displayNo       Int 
+  date            DateTime  @db.Date
+  contents        String
+  invoiceFlg     Boolean
+  paidTo          String
+  cost            Int
+  note            String?
+  createdAt       DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime  @updatedAt @db.Timestamp(0)
+  
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId,  tno])
+  @@map("Reimbursement")
+} 

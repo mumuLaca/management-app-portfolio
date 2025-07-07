@@ -1,0 +1,25 @@
+/* レイアウト‗ディスプレイ幅800px以上 */
+@media screen and (min-width: 800px) {
+  .scrollIcon {
+    position: fixed;
+    right: 3%;
+    bottom: 3%;
+    font-size: clamp(2rem, 1.4rem + 3vw, 3rem);
+    opacity: 0.9;
+    cursor: pointer;
+    color: var(--header-color);
+  }
+}
+
+/* レイアウト‗ディスプレイ幅799px以下 */
+@media screen and (max-width: 799px) {
+  .scrollIcon {
+    position: fixed;
+    right: 30px;
+    bottom: 25px;
+    font-size: clamp(2rem, 1.7rem + 3vw, 4rem);
+    opacity: 0.9;
+    cursor: pointer;
+    color: var(--header-color);
+  }
+}

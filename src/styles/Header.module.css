@@ -1,0 +1,60 @@
+.bgCustom {
+  background-color: var(--header-color);
+}
+
+.navBar {
+  background-color: var(--header-color);
+  height: var(--navbar-height);
+}
+
+.nav {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  color: rgb(255, 255, 255);
+}
+
+.linkQuestion {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 0.5rem;
+}
+
+.questionIcon {
+  color: rgb(255, 255, 255);
+  font-size: 25px;
+  transition: all 0.2s ease;
+}
+
+.linkQuestion:hover {
+  background-color: var(--hover-clr);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin: 0 0.5rem;
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: initial;
+}
+
+.profile:hover {
+  background-color: transparent;
+  cursor: initial;
+}
+
+@media screen and (min-width: 576px) {
+  .profile > span {
+    padding-left: 8px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .profile > span {
+    display: none;
+  }
+}

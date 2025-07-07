@@ -1,0 +1,48 @@
+/*スクロール幅*/
+.scrollHidden {
+  overflow-x: auto;
+  width: 100%;
+  height: calc(100vh - var(--navbar-height) - 5rem);
+  overflow-y: scroll;
+  /* IE, Edge 対応 */
+  -ms-overflow-style: none;
+  /* Firefox 対応 */
+  scrollbar-width: none;
+}
+/* Chrome, Safari 対応 */
+.scrollHidden::-webkit-scrollbar {
+  display: none;
+}
+
+.dailyScrollStyle {
+  overflow-x: auto;
+  width: 100%;
+  overflow-y: scroll;
+  /* IE, Edge 対応 */
+  -ms-overflow-style: none;
+  /* Firefox 対応 */
+  scrollbar-width: none;
+} /* Chrome, Safari 対応 */
+
+.dailyScrollStyle::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dailyScrollStyle::-webkit-scrollbar-thumb {
+  background: var(--header-color);
+  border-radius: 5px;
+}
+
+.dailyScrollStyle::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media screen and (max-width: 991px) {
+  .dailyScrollStyle::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollHidden {
+    height: calc(100vh - var(--navbar-height) - 12rem);
+  }
+}

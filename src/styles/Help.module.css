@@ -1,0 +1,214 @@
+/* ---------- common ---------- */
+ul.CUlStyle {
+  counter-reset: list;
+  list-style-type: none;
+  padding: 0;
+}
+
+ul.CUlStyle li {
+  position: relative;
+  padding: 0 0 10px 20px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  line-height: 27px;
+  border-bottom: dashed 1px var(--header-color);
+}
+
+ul.CUlStyle li:before {
+  counter-increment: list;
+  content: "";
+  display: block;
+  position: absolute;
+  margin-top: 10px;
+  top: 0;
+  left: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid var(--header-color);
+}
+
+ul.CUlStyle span:before {
+  counter-increment: list;
+  content: "・";
+  display: block;
+  position: absolute;
+  margin-left: 5px;
+  top: 1;
+  left: 0;
+}
+
+.cmnPageTitle {
+  padding-left: 5px;
+  margin-bottom: 1.2em;
+  border-left: 3px solid var(--header-color);
+  color: var(--header-color);
+}
+/* ---------- HelpCanvas ---------- */
+.header {
+  color: #fff;
+  background-color: var(--header-color);
+  padding: 0 0.7rem;
+  height: var(--navbar-height);
+}
+
+.HCLinkTop {
+  border: none;
+  background-color: var(--header-color);
+  color: rgba(255, 255, 255);
+  transition: all 0.3s ease;
+  padding: 0.01rem 0.5rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+.HCLinkTop > span {
+  margin-left: 0.5rem;
+}
+
+.HCLinkTop:hover {
+  background-color: var(--hover-clr);
+}
+
+@media screen and (max-width: 767px) {
+  .offCanvasLayout {
+    width: 100% !important;
+  }
+}
+
+/* ---------- HelpMain ---------- */
+.HMTitle {
+  border-left: 3px solid var(--header-color);
+  text-align: left;
+  color: var(--header-color);
+}
+
+.HMTitle > h3 {
+  margin-bottom: 0;
+}
+
+.HMLinkItem {
+  display: inline-block;
+  text-align: center;
+}
+
+.HMBasicButtonStyle {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 4px solid var(--header-color);
+  transition: all 0.3s ease-in-out;
+}
+
+.HMSpecialButtonStyle {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 4px solid #c76f6f;
+  transition: all 0.3s ease-in-out;
+}
+
+.HMBasicButtonStyle:hover {
+  background-color: var(--header-color);
+}
+
+.HMSpecialButtonStyle:hover {
+  background-color: #c76f6f;
+}
+
+.HMBasicButtonStyle:hover .HMIconStyle,
+.HMSpecialButtonStyle:hover .HMIconStyle {
+  color: #fff;
+}
+
+.HMBasicButtonStyle .HMIconStyle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--header-color);
+  transition: all 0.3s ease-in-out;
+}
+
+.HMSpecialButtonStyle .HMIconStyle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #c76f6f;
+  transition: all 0.3s ease-in-out;
+}
+
+.HMBasicButtonStyle + .HMItemTitle {
+  padding-top: 0.3em;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--header-color);
+}
+
+.HMSpecialButtonStyle + .HMItemTitle {
+  padding-top: 0.3em;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #c76f6f;
+}
+
+/* ---------- PageNationCommon ---------- */
+.PNCPagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.PNCPageTitle {
+  text-align: center;
+  padding-left: 5px;
+  border-left: 3px solid var(--header-color);
+  color: var(--header-color);
+}
+
+/* ---------- Inquiry ---------- */
+.formTitle {
+  color: var(--header-color);
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 2%;
+}
+
+ul.CUlStickyStyle {
+  padding: 0;
+  list-style: none;
+}
+
+ul.CUlStickyStyle li {
+  position: relative;
+  padding: 7px 5px 7px 10px;
+  margin-bottom: 5px;
+  border-left: solid 5px var(--header-color);
+  background: #f9fdff;
+  color: var(--header-color);
+  font-weight: bold;
+  -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.sendButton {
+  background-color: var(--header-color);
+  border: none;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #fff;
+  padding: 0.5em 3em;
+  border-radius: 100vh;
+  transition: all 0.3s ease;
+}
+
+.sendButton:hover {
+  background-color: #245262;
+}
