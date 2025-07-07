@@ -3,7 +3,7 @@ import prisma from "@/lib/prismadb";
 
 /**
  * @description
- * 承認状況の更新‗旅費精算表
+ * 承認状況の更新‗交通費精算表
  *
  * @param request Request object
  * @returns NextResponse

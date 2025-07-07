@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @description
- * 社員情報削除API
+ * メンバー情報削除API
  *
  * @param request request data
  * @param context URL parameters
@@ -26,7 +26,7 @@ export async function DELETE(
   }
 
   try {
-    // 社員情報の削除
+    // メンバー情報の削除
     const result = await prisma.employee.delete({
       where: {
         id: parseInt(id),

@@ -17,13 +17,13 @@ const fetcher: Fetcher<TypeAPIResponse[], string> = (url) =>
 
 /**
  * @description
- * ユーザー管理画面
+ * メンバー管理画面
  */
 export default function StatusMain() {
   const today = dayjs();
   const [yearMonth, setyearMonth] = useState<string>(today.format("YYYYMM"));
   const [filterReport, setFilterReport] = useState<string>(
-    ReportPattern.dailyReport.code
+    ReportPattern.attendance.code
   );
   const [filterSection, setFilterSection] = useState<string>("");
 

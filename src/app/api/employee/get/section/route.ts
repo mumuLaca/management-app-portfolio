@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 /**
  * @description
  * 所属情報取得API
- * 全社員の所属先を一覧化し取得
+ * 全メンバーの所属先を一覧化し取得
  *
  */
 export async function GET() {

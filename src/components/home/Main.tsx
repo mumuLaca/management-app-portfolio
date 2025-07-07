@@ -2,7 +2,7 @@
 
 import { Accordion, Card, Col, Container, Row } from "react-bootstrap";
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
   ReportPattern,
@@ -10,7 +10,7 @@ import {
 import styles from "@/styles/Main.module.css";
 import React from "react";
 import {
-  getApprovalDailyReportKey,
+  getApprovalAttendanceKey,
   getApprovalReimbursementKey,
   getApprovalSettlementKey,
 } from "@/utils/constantsUtil";
@@ -41,17 +41,17 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
   };
 
   /** 勤務表‗承認状況取得 */
-  const getApprovalOfDailyReport = (yearMonth: string) => {
+  const getApprovalOfAttendance = (yearMonth: string) => {
     const targetApproval = initData?.find((obj) => obj.yearMonth === yearMonth);
 
-    if (!targetApproval) return ApprovalStatusDailyReport.unapproved.caption;
+    if (!targetApproval) return ApprovalStatusAttendance.unapproved.caption;
 
-    return ApprovalStatusDailyReport[
-      getApprovalDailyReportKey(targetApproval?.statusOfDailyReport)
+    return ApprovalStatusAttendance[
+      getApprovalAttendanceKey(targetApproval?.statusOfAttendance)
     ].caption;
   };
 
-  /** 旅費精算表‗承認状況取得 */
+  /** 交通費精算表‗承認状況取得 */
   const getApprovalOfSettlement = (yearMonth: string) => {
     const targetApproval = initData?.find((obj) => obj.yearMonth === yearMonth);
 
@@ -62,7 +62,7 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
     ].caption;
   };
 
-  /** 旅費精算表‗立替精算表 */
+  /** 交通費精算表‗立替精算表 */
   const getApprovalOfReimbursement = (yearMonth: string) => {
     const targetApproval = initData?.find((obj) => obj.yearMonth === yearMonth);
 
@@ -85,10 +85,10 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
     // レポート別の承認ステータスを取得
     switch (reportPattern) {
       // 勤務表
-      case ReportPattern.dailyReport.code:
-        status = targetApproval.statusOfDailyReport;
+      case ReportPattern.attendance.code:
+        status = targetApproval.statusOfAttendance;
         break;
-      // 旅費精算表
+      // 交通費精算表
       case ReportPattern.settlement.code:
         status = targetApproval.statusOfSettlement;
         break;
@@ -102,37 +102,37 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
     // 承認状況によってレイアウトを決定
     switch (status) {
       // 入力中、申請なし
-      case ApprovalStatusDailyReport.unapproved.code:
+      case ApprovalStatusAttendance.unapproved.code:
       case ApprovalStatusSettlement.noInput.code:
       case ApprovalStatusReimbursement.noInput.code:
         fontColor = "text-secondary";
         break;
       // 入力中
-      case ApprovalStatusDailyReport.input.code:
+      case ApprovalStatusAttendance.input.code:
       case ApprovalStatusSettlement.input.code:
       case ApprovalStatusReimbursement.input.code:
         fontColor = "text-info";
         break;
       // 承認待ち
-      case ApprovalStatusDailyReport.approvalPending.code:
+      case ApprovalStatusAttendance.approvalPending.code:
       case ApprovalStatusSettlement.approvalPending.code:
       case ApprovalStatusReimbursement.approvalPending.code:
         fontColor = "text-primary";
         break;
       // 承認済
-      case ApprovalStatusDailyReport.approved.code:
+      case ApprovalStatusAttendance.approved.code:
       case ApprovalStatusSettlement.approved.code:
       case ApprovalStatusReimbursement.approved.code:
         fontColor = "text-success";
         break;
       // 差戻中
-      case ApprovalStatusDailyReport.reinput.code:
+      case ApprovalStatusAttendance.reinput.code:
       case ApprovalStatusSettlement.reinput.code:
       case ApprovalStatusReimbursement.reinput.code:
         fontColor = "text-warning";
         break;
       // 再申請中
-      case ApprovalStatusDailyReport.reApprovalPending.code:
+      case ApprovalStatusAttendance.reApprovalPending.code:
       case ApprovalStatusSettlement.reApprovalPending.code:
       case ApprovalStatusReimbursement.reApprovalPending.code:
         fontColor = "text-primary";
@@ -145,9 +145,9 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
   const setStatusOfReport = (yearMonth: string, reportPattern: string) => {
     switch (reportPattern) {
       // 勤務表
-      case ReportPattern.dailyReport.code:
-        return getApprovalOfDailyReport(yearMonth);
-      // 旅費精算表
+      case ReportPattern.attendance.code:
+        return getApprovalOfAttendance(yearMonth);
+      // 交通費精算表
       case ReportPattern.settlement.code:
         return getApprovalOfSettlement(yearMonth);
       // 立替精算表
@@ -160,27 +160,27 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
   const displayStatusAlert = (obj: Approval) => {
     // ステータスの配列
     const statusValues = [
-      obj.statusOfDailyReport,
+      obj.statusOfAttendance,
       obj.statusOfSettlement,
       obj.statusOfReimbursement,
     ];
 
     // 差戻中ステータス
     const reinputStatuses = [
-      ApprovalStatusDailyReport.reinput.code,
+      ApprovalStatusAttendance.reinput.code,
       ApprovalStatusSettlement.reinput.code,
       ApprovalStatusReimbursement.reinput.code,
     ];
 
     // 入力中ステータス
     const inputStatuses = [
-      ApprovalStatusDailyReport.input.code,
+      ApprovalStatusAttendance.input.code,
       ApprovalStatusSettlement.input.code,
       ApprovalStatusReimbursement.input.code,
     ];
 
-    // 承認済を表示するステータス(旅費精算、立替精算は申請なしも含む)
-    const approvedStatusesDR = [ApprovalStatusDailyReport.approved.code];
+    // 承認済を表示するステータス(交通費精算、立替精算は申請なしも含む)
+    const approvedStatusesDR = [ApprovalStatusAttendance.approved.code];
     const approvedStatusesStl = [
       ApprovalStatusSettlement.noInput.code,
       ApprovalStatusSettlement.approved.code,
@@ -211,7 +211,7 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
       return getStatusAlert("text-info", <AiFillAlert />, "入力中");
     }
     // 勤務表が未入力の場合
-    else if (ApprovalStatusDailyReport.unapproved.code === statusValues[0]) {
+    else if (ApprovalStatusAttendance.unapproved.code === statusValues[0]) {
       return getStatusAlert(
         "text-secondary",
         <IoIosNotifications />,
@@ -284,7 +284,10 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
       </Row>
       <Row>
         <Col className={styles.btnArea}>
-          <Link href="/daily" className={`${styles.btnCommon} ${styles.btnDR}`}>
+          <Link
+            href="/attendance"
+            className={`${styles.btnCommon} ${styles.btnDR}`}
+          >
             <div className={`${styles.btnCommonIconArea} `}>
               <div className={styles.btnCommonIconBG}>
                 <TbFileReport
@@ -322,7 +325,7 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
               <span
                 className={`${styles.btnCommonTextTitle} ${styles.btnStlColor}`}
               >
-                旅費精算表
+                交通費精算表
               </span>
               <span
                 className={`${styles.btnCommonTextBody} ${styles.btnStlBody}`}

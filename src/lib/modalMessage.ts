@@ -32,7 +32,7 @@ export const MODALMESSAGE: ModalMessageList = {
   MM00101: {
     kind: "W",
     title: "勤務表入力中",
-    message: `<p className="fs-5">該当社員の勤務表はまだ提出されていません。<br/>承認してもよろしいですか？</p>`,
+    message: `<p className="fs-5">該当メンバーの勤務表はまだ提出されていません。<br/>承認してもよろしいですか？</p>`,
     closeBtnPresence: true,
     btn1: {
       dispOn: true,
@@ -45,8 +45,8 @@ export const MODALMESSAGE: ModalMessageList = {
   },
   MM00401: {
     kind: "S",
-    title: "社員情報の更新",
-    message: `<p className="fs-5">入力された内容で社員情報を更新します。<br/>よろしいですか？</p>`,
+    title: "メンバー情報の更新",
+    message: `<p className="fs-5">入力された内容でメンバー情報を更新します。<br/>よろしいですか？</p>`,
     closeBtnPresence: true,
     btn1: {
       dispOn: true,

@@ -13,18 +13,18 @@ import { Session } from "next-auth";
 import { TypeAPIResponse } from "@/app/api/approval/status/[yearMonth]/[filterSection]/route";
 import {
   AdminRights,
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
   ReportPattern,
 } from "@/lib/constants";
 import ModalSettlement from "./ModalSettlement";
 import {
-  getApprovalDailyReportKey,
+  getApprovalAttendanceKey,
   getApprovalReimbursementKey,
   getApprovalSettlementKey,
 } from "@/utils/constantsUtil";
-import ModalDailyReport from "./ModalDailyReport";
+import ModalAttendance from "./ModalAttendance";
 import ModalReimbursement from "./ModalReimbursement";
 import dayjs from "@/lib/dayjs";
 
@@ -64,7 +64,7 @@ export default function List({
   >();
 
   // 明細閲覧用
-  const [dailyReportModalOpenFlg, setDailyReportModalOpenFlg] =
+  const [attendanceModalOpenFlg, setAttendanceModalOpenFlg] =
     useState<boolean>(false);
   const [settlementModalOpenFlg, setSettlementModalOpenFlg] =
     useState<boolean>(false);
@@ -75,11 +75,11 @@ export default function List({
   const disabledView = (obj: TypeAPIResponse): boolean => {
     switch (filterReport) {
       // 勤務表
-      case ReportPattern.dailyReport.code:
+      case ReportPattern.attendance.code:
         return (
-          obj.statusOfDailyReport === ApprovalStatusDailyReport.unapproved.code
+          obj.statusOfAttendance === ApprovalStatusAttendance.unapproved.code
         );
-      // 旅費精算表
+      // 交通費精算表
       case ReportPattern.settlement.code:
         return obj.statusOfSettlement === ApprovalStatusSettlement.noInput.code;
       // 立替精算表
@@ -98,15 +98,15 @@ export default function List({
     // レポートの種類別にデータ取得
     switch (filterReport) {
       // 勤務表
-      case ReportPattern.dailyReport.code:
+      case ReportPattern.attendance.code:
         await axios
           .get(`/api/employee/get/${employeeId}`)
           .then((res) => setEmployeeInfo(res.data))
           .finally(() => {
-            setDailyReportModalOpenFlg(true);
+            setAttendanceModalOpenFlg(true);
           });
         break;
-      // 旅費精算表
+      // 交通費精算表
       case ReportPattern.settlement.code:
         await axios
           .get(`/api/employee/get/${employeeId}`)
@@ -152,7 +152,7 @@ export default function List({
             <tr>
               <th>#</th>
               <th>閲覧</th>
-              <th>社員番号</th>
+              <th>メンバー番号</th>
               <th>氏名</th>
               <th>所属</th>
               <th>稼働(h)</th>
@@ -163,8 +163,8 @@ export default function List({
               employeeList.map((obj) => (
                 <tr key={obj.id}>
                   <td className="text-center">
-                    {filterReport === ReportPattern.dailyReport.code ? (
-                      <ApprovalButtonDailyReport
+                    {filterReport === ReportPattern.attendance.code ? (
+                      <ApprovalButtonAttendance
                         session={session}
                         mutateEmployeeList={mutateEmployeeList}
                         userInfo={obj}
@@ -215,9 +215,9 @@ export default function List({
         employee={employeeInfo!}
         yearMonth={yearMonth}
       />
-      <ModalDailyReport
-        dailyReportModalOpenFlg={dailyReportModalOpenFlg}
-        setDailyReportModalOpenFlg={setDailyReportModalOpenFlg}
+      <ModalAttendance
+        attendanceModalOpenFlg={attendanceModalOpenFlg}
+        setAttendanceModalOpenFlg={setAttendanceModalOpenFlg}
         employee={employeeInfo!}
         yearMonth={yearMonth}
       />
@@ -242,7 +242,7 @@ export default function List({
  * @description
  * 承認ボタン（勤務表）の作成
  */
-function ApprovalButtonDailyReport({
+function ApprovalButtonAttendance({
   session,
   mutateEmployeeList,
   userInfo,
@@ -253,10 +253,10 @@ function ApprovalButtonDailyReport({
   /** 承認処理 */
   const handleSubmit = async () => {
     // 承認API発行
-    await axios.post(`/api/approval/update/dailyReport`, {
+    await axios.post(`/api/approval/update/attendance`, {
       id: userInfo.id,
       yearMonth: userInfo.yearMonth,
-      approve: ApprovalStatusDailyReport.approved.code,
+      approve: ApprovalStatusAttendance.approved.code,
     });
 
     // 確認モーダルを閉じる
@@ -277,8 +277,8 @@ function ApprovalButtonDailyReport({
     return (
       <Button variant="secondary" disabled>
         {
-          ApprovalStatusDailyReport[
-            getApprovalDailyReportKey(userInfo.statusOfDailyReport)
+          ApprovalStatusAttendance[
+            getApprovalAttendanceKey(userInfo.statusOfAttendance)
           ].caption
         }
       </Button>
@@ -286,22 +286,22 @@ function ApprovalButtonDailyReport({
   }
 
   // 勤務表の承認状況に応じたボタンの作成
-  switch (userInfo.statusOfDailyReport) {
+  switch (userInfo.statusOfAttendance) {
     // 未承認
-    case ApprovalStatusDailyReport.unapproved.code:
+    case ApprovalStatusAttendance.unapproved.code:
       return (
         <Button variant="secondary" disabled>
-          {ApprovalStatusDailyReport.unapproved.caption}
+          {ApprovalStatusAttendance.unapproved.caption}
         </Button>
       );
 
     // 入力中
-    case ApprovalStatusDailyReport.input.code:
+    case ApprovalStatusAttendance.input.code:
       return (
         <>
           <Dropdown>
             <Dropdown.Toggle variant="secondary">
-              {ApprovalStatusDailyReport.input.caption}
+              {ApprovalStatusAttendance.input.caption}
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => setConfirmModalShow(true)}>
@@ -319,7 +319,7 @@ function ApprovalButtonDailyReport({
       );
 
     // 承認待ち
-    case ApprovalStatusDailyReport.approvalPending.code:
+    case ApprovalStatusAttendance.approvalPending.code:
       return (
         <>
           <Dropdown>
@@ -341,15 +341,15 @@ function ApprovalButtonDailyReport({
       );
 
     // 差戻中
-    case ApprovalStatusDailyReport.reinput.code:
+    case ApprovalStatusAttendance.reinput.code:
       return (
         <Button variant="warning" disabled>
-          {ApprovalStatusDailyReport.reinput.caption}
+          {ApprovalStatusAttendance.reinput.caption}
         </Button>
       );
 
     // 再申請中
-    case ApprovalStatusDailyReport.reApprovalPending.code:
+    case ApprovalStatusAttendance.reApprovalPending.code:
       return (
         <Dropdown>
           <Dropdown.Toggle variant="primary">承認可</Dropdown.Toggle>
@@ -363,11 +363,11 @@ function ApprovalButtonDailyReport({
       );
 
     // 承認済
-    case ApprovalStatusDailyReport.approved.code:
+    case ApprovalStatusAttendance.approved.code:
       return (
         <Dropdown>
           <Dropdown.Toggle variant="success">
-            {ApprovalStatusDailyReport.approved.caption}
+            {ApprovalStatusAttendance.approved.caption}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item onClick={() => handleModalRevertOpen(userInfo)}>
@@ -382,7 +382,7 @@ function ApprovalButtonDailyReport({
 
 /**
  * @description
- * 承認ボタン（旅費精算表）の作成
+ * 承認ボタン（交通費精算表）の作成
  */
 function ApprovalButtonSettlement({
   session,

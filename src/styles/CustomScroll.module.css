@@ -14,7 +14,7 @@
   display: none;
 }
 
-.dailyScrollStyle {
+.attendanceScrollStyle {
   overflow-x: auto;
   width: 100%;
   overflow-y: scroll;
@@ -24,21 +24,21 @@
   scrollbar-width: none;
 } /* Chrome, Safari 対応 */
 
-.dailyScrollStyle::-webkit-scrollbar {
+.attendanceScrollStyle::-webkit-scrollbar {
   width: 5px;
 }
 
-.dailyScrollStyle::-webkit-scrollbar-thumb {
+.attendanceScrollStyle::-webkit-scrollbar-thumb {
   background: var(--header-color);
   border-radius: 5px;
 }
 
-.dailyScrollStyle::-webkit-scrollbar-track {
+.attendanceScrollStyle::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
 }
 
 @media screen and (max-width: 991px) {
-  .dailyScrollStyle::-webkit-scrollbar {
+  .attendanceScrollStyle::-webkit-scrollbar {
     display: none;
   }
 

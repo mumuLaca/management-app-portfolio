@@ -18,7 +18,7 @@ const fetcher: Fetcher<TypeMonthlySettlement, string> = (url) =>
 
 /**
  * @description
- * 旅費精算メイン画面
+ * 交通費精算メイン画面
  */
 export default function SettlementMain() {
   /** 年月の初期値設定 */
@@ -37,7 +37,7 @@ export default function SettlementMain() {
 
   // セッション情報取得
   const { data: session, status: sessionStatus } = useSession();
-  // 旅費精算関連データ取得
+  // 交通費精算関連データ取得
   const { data, error, mutate, isLoading } = useSWR(
     session ? `/api/settlement/get/${yearMonth}/${session.employee.id}` : null,
     fetcher,

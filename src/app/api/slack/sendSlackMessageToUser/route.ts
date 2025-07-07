@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @description
- * 本部 → ユーザー にslackメッセージを送信する
+ * 本部 → メンバー にslackメッセージを送信する
  *
  * @param request request data
  */
@@ -58,7 +58,7 @@ const getMailRecipient = async (email: string) => {
       throw new Error("parameter error.");
     }
 
-    // メールアドレスからslackユーザーデータを取得
+    // メールアドレスからslackメンバーデータを取得
     const userData = await prisma.user.findFirst({
       where: {
         email: email,

@@ -56,7 +56,7 @@ export default function Profile({
     setProfileOpenFlg(false);
   };
 
-  /** 社員情報の編集状態を変更 */
+  /** メンバー情報の編集状態を変更 */
   const handleEditable = (currentValue: string) => {
     setStartTime(employee.startTime);
     setEndTime(employee.endTime);
@@ -110,7 +110,7 @@ export default function Profile({
     }
   };
 
-  /** 社員情報更新 */
+  /** メンバー情報更新 */
   const handleUpdate = async () => {
     const result = await axios.post("/api/employee/update/id", {
       params: {
@@ -149,7 +149,7 @@ export default function Profile({
             <span className="ps-2">プロフィール</span>
           </Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body className={scrollStyles.dailyScrollStyle}>
+        <Offcanvas.Body className={scrollStyles.attendanceScrollStyle}>
           <div className={styles.mainComponent}>
             <div style={{ height: "100%" }}>
               <div className={styles.topItems}>
@@ -181,7 +181,7 @@ export default function Profile({
               </div>
 
               <div className={styles.employeeInfo}>
-                <label>社員番号</label>
+                <label>メンバー番号</label>
                 <p>{employee.id}</p>
               </div>
               <div className={styles.employeeInfo}>

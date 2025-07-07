@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
 import dayjs from "@/lib/dayjs";
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
 } from "@/lib/constants";
 
 /**
  * @description
- * 旅費精算データ取得
+ * 交通費精算データ取得
  *
  * @param request request data
  * @param context route parameters
@@ -25,7 +25,7 @@ export async function GET(
   const nextMonth = currentMonth.add(1, "month");
 
   try {
-    //  旅費精算DB取得
+    //  交通費精算DB取得
     const settlementData = await prisma.settlement.findMany({
       where: {
         AND: [
@@ -43,7 +43,7 @@ export async function GET(
       orderBy: [{ date: "asc" }, { displayNo: "asc" }],
     });
 
-    // 旅費精算データが存在しない場合
+    // 交通費精算データが存在しない場合
     if (!settlementData?.length) {
       // 月跨ぎでmain画面を経由せずに遷移した場合に備えて、
       // approvalレコードが存在しない場合は作成する。
@@ -58,7 +58,7 @@ export async function GET(
         create: {
           employeeId: parseInt(id),
           yearMonth: yearMonth,
-          statusOfDailyReport: ApprovalStatusDailyReport.unapproved.code,
+          statusOfAttendance: ApprovalStatusAttendance.unapproved.code,
           statusOfSettlement: ApprovalStatusSettlement.noInput.code,
           statusOfReimbursement: ApprovalStatusReimbursement.noInput.code,
         },
@@ -99,7 +99,7 @@ export async function GET(
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { message: "旅費精算データの取得に失敗しました" },
+      { message: "交通費精算データの取得に失敗しました" },
       { status: 400 }
     );
   }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
 } from "@/lib/constants";
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         data: {
           employeeId: parseInt(id),
           yearMonth: yearMonth,
-          statusOfDailyReport: ApprovalStatusDailyReport.unapproved.code,
+          statusOfAttendance: ApprovalStatusAttendance.unapproved.code,
           statusOfSettlement: ApprovalStatusSettlement.noInput.code,
           statusOfReimbursement: ApprovalStatusReimbursement.noInput.code,
         },

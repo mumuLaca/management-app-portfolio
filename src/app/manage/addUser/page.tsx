@@ -4,14 +4,14 @@ import { SiteMeta } from "@/lib/constants";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `新規ユーザー登録`,
-  description: "社員の新規登録を行います。",
+  title: `新規メンバー登録`,
+  description: "メンバーの新規登録を行います。",
   ...SiteMeta,
 };
 
 /**
  * @description
- * ユーザー追加画面
+ * メンバー追加画面
  */
 export default function AddUserPage() {
   return <AddUserMain />;

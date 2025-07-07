@@ -11,7 +11,7 @@ type EmployeeData = {
 
 /**
  * @description
- * 社員情報登録API
+ * メンバー情報登録API
  *
  * @param request request data
  */

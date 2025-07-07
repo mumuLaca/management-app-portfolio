@@ -3,7 +3,7 @@ import styles from "@/styles/Help.module.css";
 
 /**
  * @description
- * ヘルプページ‗旅費精算表
+ * ヘルプページ‗交通費精算表
  */
 export default function PageSettlement() {
   return (

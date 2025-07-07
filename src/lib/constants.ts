@@ -82,7 +82,7 @@ export const WorkStyle: TypeWorkStyle = {
 };
 
 /** 承認状況_勤務表 */
-export const ApprovalStatusDailyReport: TypeApprovalStatusDR = {
+export const ApprovalStatusAttendance: TypeApprovalStatusDR = {
   unapproved: { code: "0", caption: "未入力" },
   input: { code: "1", caption: "入力中" },
   approvalPending: { code: "2", caption: "承認待ち" },
@@ -91,7 +91,7 @@ export const ApprovalStatusDailyReport: TypeApprovalStatusDR = {
   approved: { code: "5", caption: "承認済" },
 };
 
-/** 承認状況‗旅費精算表 */
+/** 承認状況‗交通費精算表 */
 export const ApprovalStatusSettlement: TypeApprovalStatusStl = {
   noInput: { code: "0", caption: "申請なし" }, // 未入力
   input: { code: "1", caption: "入力中" }, // 入力中、未提出
@@ -109,6 +109,17 @@ export const ApprovalStatusReimbursement: TypeApprovalStatusReim = {
   reinput: { code: "3", caption: "差戻中" }, // 入力ミスにより差戻、再修正中
   reApprovalPending: { code: "4", caption: "再申請中" }, // 差戻後、再提出
   approved: { code: "5", caption: "承認済" }, // 管理本部の承認済
+};
+
+/** 承認状況‗日報 */
+export const ApprovalStatusDailyReport: TypeApprovalStatusDailyReport = {
+  noInput: { code: "0", caption: "未入力", next: "" }, // 未入力
+  saveTemporary: { code: "1", caption: "一時保存中", next: "" }, // 一時保存
+  submitted: { code: "2", caption: "提出済", next: "育成担当承認待ち" }, // 提出済
+  firstApproval: { code: "3", caption: "育成担当承認済", next: "本社承認待ち" },
+  secondApproval: { code: "4", caption: "本社承認済", next: "" },
+  firstPending: { code: "5", caption: "一次差戻中", next: "育成担当承認済" },
+  secondPending: { code: "6", caption: "二次差戻中", next: "本社承認済" },
 };
 
 /** 精算形態 */
@@ -134,14 +145,14 @@ export const EntryFlg: TypeEntryFlg = {
 
 /** 表パターン */
 export const ReportPattern: TypeReportPattern = {
-  dailyReport: {
+  attendance: {
     code: "1",
     name: "勤務表",
-    ename: "dailyReport",
+    ename: "attendance",
   },
   settlement: {
     code: "2",
-    name: "旅費精算表",
+    name: "交通費精算表",
     ename: "settlement",
   },
   reimbursement: {
@@ -151,7 +162,43 @@ export const ReportPattern: TypeReportPattern = {
   },
 };
 
-/** 社員情報初期値 */
+/** 日報タイプ */
+export const DailyReportType: TypeDailyReportType = {
+  daily: {
+    code: "1",
+    name: "日報",
+  },
+  weekly: {
+    code: "2",
+    name: "週報",
+  },
+  monthly: {
+    code: "3",
+    name: "月報",
+  },
+  quarter: {
+    code: "4",
+    name: "四半期",
+  },
+};
+
+/** 日報権限 */
+export const DailyReportAuthority: TypeDailyReportAuthority = {
+  mySelf: {
+    code: "0",
+    caption: "自分",
+  },
+  trainer: {
+    code: "1",
+    caption: "育成担当",
+  },
+  officeStaff: {
+    code: "2",
+    caption: "本社担当",
+  },
+};
+
+/** メンバー情報初期値 */
 export const InitEmployeeInfo: Employee = {
   id: 0,
   email: "",
@@ -165,5 +212,10 @@ export const InitEmployeeInfo: Employee = {
   updatedAt: new Date(),
 };
 
-/** 【テスト】先行テストID */
-export const TestIDList = [343100, 344084, 345083, 362119];
+/** 課題進行状況 */
+export const IssueStatus: TypeIssueStatus = {
+  inComplete: { code: "0", caption: "未完了" },
+  onGoing: { code: "1", caption: "進行中" },
+  complete: { code: "2", caption: "完了" },
+  cancel: { code: "3", caption: "キャンセル" },
+};

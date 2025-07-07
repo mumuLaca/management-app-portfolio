@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @description
- * 社員情報取得API
- * IDに紐づく社員情報を取得する
+ * メンバー情報取得API
+ * IDに紐づくメンバー情報を取得する
  *
  * @param request request data
  * @param context URL parameters
@@ -27,7 +27,7 @@ export async function GET(
   }
 
   try {
-    // 社員情報を取得
+    // メンバー情報を取得
     const result = await prisma.employee.findUnique({
       where: {
         id: parseInt(id),
@@ -36,7 +36,7 @@ export async function GET(
 
     if (!result) {
       return NextResponse.json(
-        { message: "社員情報が見つかりません" },
+        { message: "メンバー情報が見つかりません" },
         { status: 404 }
       );
     }

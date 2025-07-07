@@ -29,7 +29,7 @@ import { TypeMonthlyReimbursement } from "@/types/reimbursement";
 import { editComma } from "@/utils/commonUtil";
 
 interface Props {
-  employee: Employee; // 社員情報
+  employee: Employee; // メンバー情報
   reimbursementData: TypeMonthlyReimbursement; // 立替精算データ
   yearMonth: string; // 年月
   setTargetyearMonth: Dispatch<SetStateAction<string>> | null; // 年月のusestate

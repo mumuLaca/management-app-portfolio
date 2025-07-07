@@ -14,9 +14,9 @@ interface Props {
 
 /**
  * @description
- * 社員情報削除時の確認モーダル
+ * メンバー情報削除時の確認モーダル
  *
- * 社員情報削除時、削除確認のモーダルを表示する。
+ * メンバー情報削除時、削除確認のモーダルを表示する。
  */
 export default function ModalDeleteConfirm({
   show,
@@ -53,7 +53,7 @@ export default function ModalDeleteConfirm({
         <Modal.Body>
           <div>
             <dl style={{ fontSize: "22px" }}>
-              <dt>社員番号</dt>
+              <dt>メンバー番号</dt>
               <dd className="ms-5">{deleteEmployee.id}</dd>
               <dt>名前</dt>
               <dd className="ms-5">{deleteEmployee.name}</dd>

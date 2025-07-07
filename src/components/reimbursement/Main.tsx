@@ -36,7 +36,7 @@ export default function ReimbursementMain() {
 
   // セッション情報取得
   const { data: session, status: sessionStatus } = useSession();
-  // 旅費精算関連データ取得
+  // 交通費精算関連データ取得
   const { data, error, mutate, isLoading } = useSWR(
     session
       ? `/api/reimbursement/get/${yearMonth}/${session.employee.id}`

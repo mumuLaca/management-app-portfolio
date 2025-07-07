@@ -3,7 +3,7 @@ import prisma from "@/lib/prismadb";
 
 /**
  * @description
- * 旅費精算登録パターン削除
+ * 交通費精算登録パターン削除
  * @param request request data
  */
 export async function POST(request: NextRequest) {
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     if (result === null) {
       return NextResponse.json(
-        { message: "旅費精算登録パターンの削除に失敗しました" },
+        { message: "交通費精算登録パターンの削除に失敗しました" },
         { status: 400 }
       );
     }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { message: "旅費精算登録パターンの削除に失敗しました" },
+      { message: "交通費精算登録パターンの削除に失敗しました" },
       { status: 400 }
     );
   }

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @description
- * 旅費精算パターンDB‗登録API
+ * 交通費精算パターンDB‗登録API
  * @param request request data
  */
 export async function POST(request: NextRequest) {
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     console.error(err);
 
     return NextResponse.json(
-      { message: "旅費精算パターンの登録に失敗しました" },
+      { message: "交通費精算パターンの登録に失敗しました" },
       { status: 400 }
     );
   }

@@ -16,14 +16,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           errorCode: "INVALID_PARAMETERS",
-          message: "社員IDが指定されていません。",
+          message: "メンバーIDが指定されていません。",
         },
         { status: 400 }
       );
     }
 
     // 備考
-    const noteList = await prisma.dailyReport.findMany({
+    const noteList = await prisma.attendance.findMany({
       where: { employeeId: parseInt(id) },
       select: { note: true },
       distinct: ["note"],

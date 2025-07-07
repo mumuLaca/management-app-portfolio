@@ -116,8 +116,8 @@ export default function SideBar({
           <li>
             <Link
               onClick={() => setSidebarShow(false)}
-              href="/daily"
-              className={pathName === "/daily" ? `${styles.active}` : ``}
+              href="/attendance"
+              className={pathName === "/attendance" ? `${styles.active}` : ``}
             >
               <TbFileReport />
               <span>勤務表</span>
@@ -130,7 +130,7 @@ export default function SideBar({
               className={pathName === "/settlement" ? `${styles.active}` : ``}
             >
               <MdCardTravel />
-              <span>旅費精算表</span>
+              <span>交通費精算表</span>
             </Link>
           </li>
           <li>
@@ -218,7 +218,7 @@ export default function SideBar({
                             }
                           >
                             <BsPersonAdd />
-                            <span>ユーザー登録</span>
+                            <span>メンバー登録</span>
                           </Link>
                         </li>
                         <li>
@@ -232,7 +232,7 @@ export default function SideBar({
                             }
                           >
                             <BsPersonDash />
-                            <span>ユーザー削除</span>
+                            <span>メンバー削除</span>
                           </Link>
                         </li>
                         <li>
@@ -246,7 +246,7 @@ export default function SideBar({
                             }
                           >
                             <BsPersonCheck />
-                            <span>ユーザー更新</span>
+                            <span>メンバー更新</span>
                           </Link>
                         </li>
                       </>

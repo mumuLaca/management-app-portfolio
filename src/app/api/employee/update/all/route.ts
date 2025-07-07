@@ -23,8 +23,8 @@ type RequestBody = {
 
 /**
  * @description
- * 社員情報更新API
- * 変更対象の社員情報を一括更新する
+ * メンバー情報更新API
+ * 変更対象のメンバー情報を一括更新する
  *
  * @param request request data
  */
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       updateEmployees.length === 0
     ) {
       return NextResponse.json(
-        { message: "更新対象の社員情報が指定されていません" },
+        { message: "更新対象のメンバー情報が指定されていません" },
         { status: 400 }
       );
     }

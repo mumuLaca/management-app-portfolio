@@ -59,7 +59,7 @@ type TypeApprovalStatusDR = {
   };
 };
 
-/** ----- 承認状況_旅費精算表 ----- */
+/** ----- 承認状況_交通費精算表 ----- */
 type ApprovalStatusStlKeys =
   | "noInput"
   | "input"
@@ -75,7 +75,7 @@ type TypeApprovalStatusStl = {
   };
 };
 
-/** ----- 承認状況_旅費精算表 ----- */
+/** ----- 承認状況_立替精算表 ----- */
 type ApprovalStatusReimKeys =
   | "noInput"
   | "input"
@@ -88,6 +88,24 @@ type TypeApprovalStatusReim = {
   [key in ApprovalStatusReimKeys]: {
     code: string;
     caption: string;
+  };
+};
+
+/** ----- 承認状況_日報 ----- */
+type ApprovalStatusDailyReportKeys =
+  | "noInput"
+  | "saveTemporary"
+  | "submitted"
+  | "firstApproval"
+  | "secondApproval"
+  | "firstPending"
+  | "secondPending";
+
+type TypeApprovalStatusDailyReport = {
+  [key in ApprovalStatusDailyReportKeys]: {
+    code: string;
+    caption: string;
+    next: string;
   };
 };
 
@@ -112,13 +130,43 @@ type TypeTravelMethod = {
 };
 
 /** ----- 表パターン ----- */
-type ReportPatternKeys = "dailyReport" | "settlement" | "reimbursement";
+type ReportPatternKeys = "attendance" | "settlement" | "reimbursement";
 
 type TypeReportPattern = {
   [key in ReportPatternKeys]: {
     code: string;
     name: string;
     ename: string;
+  };
+};
+
+/** ----- 日報タイプ ----- */
+type DailyReportTypeKeys = "daily" | "weekly" | "monthly" | "quarter";
+
+type TypeDailyReportType = {
+  [key in DailyReportTypeKeys]: {
+    code: string;
+    name: string;
+  };
+};
+
+/** ----- 日報権限 ----- */
+type DailyReportAuthorityKeys = "mySelf" | "trainer" | "officeStaff";
+
+type TypeDailyReportAuthority = {
+  [key in DailyReportAuthorityKeys]: {
+    code: string;
+    caption: string;
+  };
+};
+
+/** ----- 日報権限 ----- */
+type IssueStatusKeys = "inComplete" | "onGoing" | "complete" | "cancel";
+
+type TypeIssueStatus = {
+  [key in IssueStatusKeys]: {
+    code: string;
+    caption: string;
   };
 };
 

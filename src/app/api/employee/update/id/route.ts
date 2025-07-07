@@ -13,8 +13,8 @@ type RequestBody = {
 
 /**
  * @description
- * 社員情報更新API
- * IDに紐づく社員情報を更新する
+ * メンバー情報更新API
+ * IDに紐づくメンバー情報を更新する
  *
  * @param request request data
  */
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        { message: "社員IDが指定されていません" },
+        { message: "メンバーIDが指定されていません" },
         { status: 400 }
       );
     }
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 社員情報を更新
+    // メンバー情報を更新
     const result = await prisma.employee.update({
       where: {
         id: Number(id),

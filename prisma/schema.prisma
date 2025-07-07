@@ -52,7 +52,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// 社員情報TBL
+// メンバー情報TBL
 model Employee {
   id                  Int      @id
   email               String   @unique
@@ -64,17 +64,18 @@ model Employee {
   basicWorkStyle      String   @default("1")
   createdAt           DateTime @default(now()) @db.Timestamp(0)
   updatedAt           DateTime @updatedAt @db.Timestamp(0)
-  dailyReport DailyReport[]
+  attendance Attendance[]
   settlement Settlement[]
   settlementPattern SettlementPattern[]
   approval Approval[]
   reimbursement Reimbursement[]
+  roomInfo  RoomInfo[]
 
   @@map("Employee")
 }
 
 // 勤務表TBL
-model DailyReport {
+model Attendance {
   employeeId Int
   date       DateTime  @db.Date
   startTime  DateTime? @db.Time
@@ -89,10 +90,10 @@ model DailyReport {
   employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
   @@id([employeeId, date])
-  @@map("DailyReport")
+  @@map("Attendance")
 }
 
-// 旅費精算表TBL
+// 交通費精算表TBL
 model Settlement {
   employeeId      Int
   tno             Int @unique @default(autoincrement())
@@ -117,11 +118,11 @@ model Settlement {
 
 // 承認状況TBL
 model Approval {
-  employeeId            Int       // 社員ID
+  employeeId            Int       // メンバーID
   yearMonth             String    // 対象年月
   totalActive           Decimal   @default(0) // 総稼働時間（月）
-  statusOfDailyReport   String    // 承認状況（勤務表）
-  statusOfSettlement    String    // 承認状況（旅費精算表）
+  statusOfAttendance   String    // 承認状況（勤務表）
+  statusOfSettlement    String    // 承認状況（交通費精算表）
   statusOfReimbursement String    // 承認状況（立替精算表）
   createdAt             DateTime  @default(now()) @db.Timestamp(0)
   updatedAt             DateTime  @updatedAt @db.Timestamp(0)
@@ -132,7 +133,7 @@ model Approval {
   @@map("Approval")
 }
 
-// 旅費精算表パターンTBL
+// 交通費精算表パターンTBL
 model SettlementPattern {
   employeeId      Int
   tno             Int @unique @default(autoincrement())
@@ -173,3 +174,145 @@ model Reimbursement {
   @@id([employeeId,  tno])
   @@map("Reimbursement")
 } 
+
+// 日報ルームTBL
+model RoomInfo {
+  employeeId  Int      
+  roomId      String   @unique @db.VarChar(255)
+  dailyReportType   String   @default("0") @db.Char(1)
+  fromDate    DateTime @db.Date
+  toDate      DateTime @db.Date
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+
+  roomMember RoomMember[]
+  dailyReportPost  DailyReportPost[]
+  issue      Issue[]
+
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId, roomId])
+  @@map("RoomInfo")
+}
+
+// 日報ルームメンバーTBL
+model RoomMember {
+  roomId       String   @db.VarChar(255)
+  employeeId   Int
+  employeeName String
+  authority    String   @default("0") @db.Char(1)
+  createdAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
+
+  roomInfo RoomInfo @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
+
+  @@id([roomId, employeeId])
+  @@map("RoomMember")
+}
+
+// 日報TBL
+model DailyReportPost {
+  postId         String   @id @db.VarChar(255)
+  roomId         String   @db.VarChar(255)
+  date           DateTime @db.Date
+  status         String   @default("0") @db.Char(1)
+  createdAt      DateTime @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime @updatedAt @db.Timestamp(0)
+
+  postSection PostSection[]
+
+  roomInfo RoomInfo @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
+
+  @@map("DailyReportPost")
+}
+
+// 日報‗セクションTBL
+model PostSection {
+  postId      String   @db.VarChar(255) 
+  indexNo     Int
+  title       String
+  content     String   @db.Text
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+
+  sectionComment SectionComment[]
+
+  dailyReportPost DailyReportPost @relation(fields: [postId], references: [postId], onDelete: Cascade)
+
+  @@id([postId, indexNo])
+  @@map("PostSection")
+}
+
+// 日報_コメントTBL
+model SectionComment {
+  postId       String   @db.VarChar(255)
+  indexNo      Int
+  employeeId   Int
+  employeeName String
+  commentNo    Int 
+  content      String   @db.Text
+  date         DateTime @db.Date
+  createdAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
+ 
+  postSection  PostSection @relation(fields: [postId, indexNo], references: [postId, indexNo], onDelete: Cascade)
+
+  @@id([postId, indexNo, commentNo])
+  @@map("SectionComment")
+}
+
+// 週報、四半期報‗カバーセクションTBL
+model CoverSection {
+  postId      String   @db.VarChar(255)
+  indexNo     Int
+  title       String
+  content     String   @db.Text
+  roomId      String   @db.VarChar(255)
+  yearMonth   String   @db.VarChar(6) 
+  dailyReportType   String   @default("0") @db.Char(1)
+  createdAt   DateTime @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @db.Timestamp(0)
+
+  coverSectionComment CoverSectionComment[]
+
+
+  @@id([postId, indexNo])
+  @@map("CoverSection")
+}
+
+// 週報、四半期報‗カバーセクションコメントTBL
+model CoverSectionComment {
+  postId       String   @db.VarChar(255)
+  indexNo      Int
+  employeeId   Int
+  employeeName String
+  commentNo    Int 
+  content      String   @db.Text
+  date         DateTime @db.Date
+  createdAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
+ 
+  coverSection  CoverSection @relation(fields: [postId, indexNo], references: [postId, indexNo], onDelete: Cascade)
+
+  @@id([postId, indexNo, commentNo])
+  @@map("CoverSectionComment")
+}
+
+// 課題管理TBL
+model Issue{
+  roomId         String     @db.VarChar(255)
+  issueNo        Int      
+  date           DateTime   @db.Date
+  category       String     @db.VarChar(100)
+  content        String     @db.Text
+  detail         String?    @db.Text
+  status         String     @default("0")
+  startDate      DateTime?  @db.Date
+  completeDate   DateTime?  @db.Date
+  createdAt      DateTime   @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime   @updatedAt @db.Timestamp(0)
+
+  roomInfo RoomInfo @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
+  @@id([roomId, issueNo])
+  @@map("Issue")
+}

@@ -22,7 +22,7 @@ const fetcher: Fetcher<SettlementPattern[], string> = (url) =>
 
 /**
  * @description
- * 旅費精算入力用のモーダル
+ * 交通費精算入力用のモーダル
  */
 export default function ModalPatternTranfer({
   modalOpenFlg,

@@ -60,9 +60,9 @@ type Props = {
 
 /**
  * @description
- * 旅費精算表_リスト
+ * 交通費精算表_リスト
  *
- * 旅費精算表出力エリア
+ * 交通費精算表出力エリア
  * 管理画面で参照用にも使用
  */
 export default function List({
@@ -87,7 +87,7 @@ export default function List({
     }
   }, [settlementData, editable, setInputCheck, mutateSettlement]);
 
-  /** ユーザーが編集可能かどうかを判定 */
+  /** メンバーが編集可能かどうかを判定 */
   const isUserEditable = () => {
     // 承認状況が「申請なし」「入力中」「差戻中」の場合は編集可能とする
     return [

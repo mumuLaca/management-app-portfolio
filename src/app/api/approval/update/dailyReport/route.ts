@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         },
       },
       data: {
-        statusOfDailyReport: approve,
+        statusOfAttendance: approve,
       },
     });
 

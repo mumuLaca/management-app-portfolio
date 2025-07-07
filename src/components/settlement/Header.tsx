@@ -28,8 +28,8 @@ import { Employee } from "@prisma/client";
 import { MESSAGE } from "@/lib/message";
 
 interface Props {
-  employee: Employee; // 社員情報
-  settlementData: TypeMonthlySettlement; // 旅費精算データ
+  employee: Employee; // メンバー情報
+  settlementData: TypeMonthlySettlement; // 交通費精算データ
   yearMonth: string; // 年月
   setTargetyearMonth: Dispatch<SetStateAction<string>> | null; // 年月のusestate
   editable: boolean; // 編集可否
@@ -51,7 +51,7 @@ const HeaderContext = createContext(
 
 /**
  * @description
- * 旅費精算表_ヘッダー
+ * 交通費精算表_ヘッダー
  *
  * 日付情報や精算金額を表示
  */
@@ -275,7 +275,7 @@ function ApprovalButton() {
     setModalShow(true);
   };
 
-  /** 旅費精算表の承認状況を更新 */
+  /** 交通費精算表の承認状況を更新 */
   const handleUpdateApproval = async (approvalStatus: string) => {
     try {
       // 承認状況を更新
@@ -290,9 +290,9 @@ function ApprovalButton() {
         await axios.post("/api/slack/sendSlackMessageToAdmin", {
           message: `【${dayjs(settlementData.yearMonth).format(
             "YYYY年MM月"
-          )}旅費精算表再提出】\n提出者：${
+          )}交通費精算表再提出】\n提出者：${
             employee.name
-          }\n旅費精算表の修正が完了しました。`,
+          }\n交通費精算表の修正が完了しました。`,
         });
       }
 

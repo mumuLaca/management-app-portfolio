@@ -36,7 +36,7 @@ type Props = {
 
 /**
  * @description
- * 旅費精算入力用のモーダル
+ * 交通費精算入力用のモーダル
  */
 export default function ModalEntry({
   entryModalOpenFlg,
@@ -356,7 +356,7 @@ export default function ModalEntry({
           <Modal.Title>
             <div className="text-nowrap">
               <MdCardTravel />
-              <span className="ms-2">旅費精算入力</span>
+              <span className="ms-2">交通費精算入力</span>
             </div>
           </Modal.Title>
         </Modal.Header>

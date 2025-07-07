@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
 import dayjs from "@/lib/dayjs";
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
 } from "@/lib/constants";
@@ -90,7 +90,7 @@ const createApprovalRecord = async (
   const approvalData = {
     employeeId: Number(id),
     yearMonth: yearMonth,
-    statusOfDailyReport: ApprovalStatusDailyReport.unapproved.code,
+    statusOfAttendance: ApprovalStatusAttendance.unapproved.code,
     statusOfSettlement: ApprovalStatusSettlement.noInput.code,
     statusOfReimbursement: ApprovalStatusReimbursement.noInput.code,
   };
@@ -102,7 +102,7 @@ const createApprovalRecord = async (
       employeeId: true,
       yearMonth: true,
       totalActive: true,
-      statusOfDailyReport: true,
+      statusOfAttendance: true,
       statusOfSettlement: true,
       statusOfReimbursement: true,
       createdAt: true,

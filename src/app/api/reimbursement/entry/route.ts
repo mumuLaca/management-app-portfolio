@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
 
       // 削除
       case EntryFlg.delete:
-        /** 旅費精算DBからデータ削除 */
+        /** 交通費精算DBからデータ削除 */
         await prisma.$transaction(async (prisma) => {
           await prisma.reimbursement.delete({
             where: {
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
           );
           // 次月1日
           const nextMonth = currentMonth.add(1, "month");
-          // 当月の旅費精算DBレコードが存在するか取得
+          // 当月の交通費精算DBレコードが存在するか取得
           const reimbursementData = await prisma.reimbursement.findFirst({
             where: {
               AND: [

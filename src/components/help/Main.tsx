@@ -7,7 +7,7 @@ import { displayComponentContext } from "@/components/help/HelpCanvas";
 import styles from "@/styles/Help.module.css";
 import { AdminRights } from "@/lib/constants";
 import PageSettlement from "./PageSettlement";
-import PageDailyReport0 from "@/components/help/PageDailyReport0";
+import PageAttendance0 from "@/components/help/PageAttendance0";
 import PageProfile from "@/components/help/PageProfile";
 import PageStatus0 from "@/components/help/PageStatus0";
 import PageAddUser from "@/components/help/PageAddUser";
@@ -28,7 +28,7 @@ import {
 // ページを追加したらここにもコンポーネント情報を追加
 const displayItems = [
   {
-    component: <PageDailyReport0 />,
+    component: <PageAttendance0 />,
     iconComp: <TbFileReport />,
     buttonStyle: styles.HMBasicButtonStyle,
     title: "勤務表",
@@ -39,7 +39,7 @@ const displayItems = [
     component: <PageSettlement />,
     iconComp: <MdCardTravel />,
     buttonStyle: styles.HMBasicButtonStyle,
-    title: "旅費精算表",
+    title: "交通費精算表",
     admin: true,
     hidden: [],
   },
@@ -71,7 +71,7 @@ const displayItems = [
     component: <PageAddUser />,
     iconComp: <BsPersonAdd />,
     buttonStyle: styles.HMBasicButtonStyle,
-    title: "ユーザー登録",
+    title: "メンバー登録",
     admin: true,
     hidden: [AdminRights.general.code, AdminRights.leader.code],
   },
@@ -79,7 +79,7 @@ const displayItems = [
     component: <PageDeleteUser />,
     iconComp: <BsPersonDash />,
     buttonStyle: styles.HMBasicButtonStyle,
-    title: "ユーザー削除",
+    title: "メンバー削除",
     admin: true,
     hidden: [AdminRights.general.code, AdminRights.leader.code],
   },
@@ -87,7 +87,7 @@ const displayItems = [
     component: <PageUpdateUser />,
     iconComp: <BsPersonCheck />,
     buttonStyle: styles.HMBasicButtonStyle,
-    title: "ユーザー変更",
+    title: "メンバー変更",
     admin: true,
     hidden: [AdminRights.general.code, AdminRights.leader.code],
   },

@@ -1,4 +1,4 @@
-import { DailyReport } from "@prisma/client";
+import { Attendance } from "@prisma/client";
 import dayjs from "@/lib/dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -8,10 +8,10 @@ dayjs.extend(utc);
  * @description
  * 稼働時間(日)算出
  *
- * @param row DailyReportレコード
+ * @param row Attendanceレコード
  * @returns 稼働時間
  */
-export function calcActiveTime(row: DailyReport): number | null {
+export function calcActiveTime(row: Attendance): number | null {
   if (row.startTime === null || row.endTime === null) {
     return null;
   }
@@ -35,10 +35,10 @@ export function calcActiveTime(row: DailyReport): number | null {
  * @description
  * 残業時間算出
  *
- * @param input DailyReport
+ * @param input Attendance
  * @returns 残業時間
  */
-export function calcOverTime(input: DailyReport): number | null {
+export function calcOverTime(input: Attendance): number | null {
   const activeTime = calcActiveTime(input);
 
   if (activeTime === null) return null;
@@ -51,10 +51,10 @@ export function calcOverTime(input: DailyReport): number | null {
  * ===休憩時間は含めていない
  * 深夜残業時間算出
  *
- * @param row DailyReportレコード
+ * @param row Attendanceレコード
  * @returns 深夜残業時間
  */
-export function calcLateNightOverTime(input: DailyReport): number | null {
+export function calcLateNightOverTime(input: Attendance): number | null {
   if (input.startTime === null || input.endTime === null) {
     return null;
   }
@@ -129,10 +129,10 @@ export function calcLateNightOverTime(input: DailyReport): number | null {
  * @description
  * 法定休日勤務時間算出
  *
- * @param row DailyReportレコード
+ * @param row Attendanceレコード
  * @returns 法定休日勤務時間
  */
-export function calcLegalHolidayActiveTime(input: DailyReport): number | null {
+export function calcLegalHolidayActiveTime(input: Attendance): number | null {
   if (input === undefined) return null;
 
   const date = dayjs(input.date);

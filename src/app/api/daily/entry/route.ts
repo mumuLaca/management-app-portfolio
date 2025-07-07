@@ -1,7 +1,7 @@
 import prisma from "@/lib/prismadb";
 import { NextRequest, NextResponse } from "next/server";
 import dayjs from "@/lib/dayjs";
-import { ApprovalStatusDailyReport } from "@/lib/constants";
+import { ApprovalStatusAttendance } from "@/lib/constants";
 import {
   calcActiveTime,
   calcLateNightOverTime,
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (deleteFlg === "1") {
       await prisma.$transaction(async (tx) => {
         // 削除処理
-        await tx.dailyReport.deleteMany({
+        await tx.attendance.deleteMany({
           where: {
             employeeId,
             date: { in: targetDateList },
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         });
 
         // 対象月のレコードが残存しているか確認
-        const exists = await tx.dailyReport.findFirst({
+        const exists = await tx.attendance.findFirst({
           where: {
             employeeId,
             date: {
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
               employeeId_yearMonth: { employeeId, yearMonth },
             },
             data: {
-              statusOfDailyReport: ApprovalStatusDailyReport.unapproved.code,
+              statusOfAttendance: ApprovalStatusAttendance.unapproved.code,
             },
           });
         }
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
         const end = endTime ? dayjs.utc(endTime, "HH:mm").toDate() : null;
         const restTime = rest ? parseFloat(rest) : null;
 
-        return prisma.dailyReport.upsert({
+        return prisma.attendance.upsert({
           where: {
             employeeId_date: { employeeId: employeeId, date: entryDate },
           },
@@ -132,21 +132,21 @@ export async function POST(request: NextRequest) {
           where: {
             employeeId: employeeId,
             yearMonth: yearMonth,
-            statusOfDailyReport: {
+            statusOfAttendance: {
               // 差戻中の場合は更新しないものとする。
-              not: ApprovalStatusDailyReport.reinput.code,
+              not: ApprovalStatusAttendance.reinput.code,
             },
           },
           data: {
-            statusOfDailyReport: ApprovalStatusDailyReport.input.code,
+            statusOfAttendance: ApprovalStatusAttendance.input.code,
           },
         });
       });
     }
 
     // ============================ 共通処理 ============================
-    // 社員IDに紐づく勤務表データを取得
-    const dailyReportList = await prisma.dailyReport.findMany({
+    // メンバーIDに紐づく勤務表データを取得
+    const attendanceList = await prisma.attendance.findMany({
       where: {
         AND: [
           {
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
     });
 
     // 返却用データを作成
-    const customDailyReport = dailyReportList.map((row) => {
+    const customAttendance = attendanceList.map((row) => {
       // 各計算結果を変数に保存
       const activeTime = calcActiveTime(row); // 稼働時間
       const overTime = calcOverTime(row); //残業時間
@@ -193,7 +193,7 @@ export async function POST(request: NextRequest) {
         },
       },
       data: {
-        totalActive: customDailyReport.reduce((sum, row) => {
+        totalActive: customAttendance.reduce((sum, row) => {
           return sum + (row.activeTime ?? 0);
         }, 0),
       },

@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     }
 
     await prisma.$transaction(async () => {
-      const updateDate = await prisma.dailyReport.findMany({
+      const updateDate = await prisma.attendance.findMany({
         where: {
           employeeId: parseInt(body.id),
           date: {
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
       // 更新処理
       // 区分が休日扱いのものは更新対象外
       const query = updateDate.map((item) => {
-        return prisma.dailyReport.update({
+        return prisma.attendance.update({
           where: {
             employeeId_date: { employeeId: parseInt(body.id), date: item.date },
             absentCode: {
@@ -124,8 +124,8 @@ export async function POST(request: NextRequest) {
       await prisma.$transaction(query);
 
       // ============================ 共通処理 ============================
-      // 社員IDに紐づく勤務表データを取得
-      const dailyReportList = await prisma.dailyReport.findMany({
+      // メンバーIDに紐づく勤務表データを取得
+      const attendanceList = await prisma.attendance.findMany({
         where: {
           AND: [
             {
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
       });
 
       // 返却用データを作成
-      const customDailyReport = dailyReportList.map((row) => {
+      const customAttendance = attendanceList.map((row) => {
         // 各計算結果を変数に保存
         const activeTime = calcActiveTime(row); // 稼働時間
         const overTime = calcOverTime(row); //残業時間
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
           },
         },
         data: {
-          totalActive: customDailyReport.reduce((sum, row) => {
+          totalActive: customAttendance.reduce((sum, row) => {
             return sum + (row.activeTime ?? 0);
           }, 0),
         },

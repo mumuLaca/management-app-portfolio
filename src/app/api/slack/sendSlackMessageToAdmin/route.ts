@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * @description
- * ユーザー → 本部 にslackメッセージを送信する
+ * メンバー → 本部 にslackメッセージを送信する
  *
  * @param request request data
  */

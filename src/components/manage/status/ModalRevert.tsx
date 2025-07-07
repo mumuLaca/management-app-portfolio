@@ -1,5 +1,5 @@
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
   ReportPattern,
@@ -37,7 +37,7 @@ export default function ModalRevert({
     if (revertData) {
       switch (revertData.reportPattern) {
         // 勤務表
-        case ReportPattern.dailyReport.code:
+        case ReportPattern.attendance.code:
           setMessage(
             `【${yearAndMonth.slice(0, 4)}年${yearAndMonth.slice(
               4
@@ -45,12 +45,12 @@ export default function ModalRevert({
           );
           break;
 
-        // 旅費精算表
+        // 交通費精算表
         case ReportPattern.settlement.code:
           setMessage(
             `【${yearAndMonth.slice(0, 4)}年${yearAndMonth.slice(
               4
-            )}月 旅費精算表差戻し】\n旅費精算表に不備がありますので、修正をお願いします。修正後に再提出してください。\n\n不備内容:\n`
+            )}月 交通費精算表差戻し】\n交通費精算表に不備がありますので、修正をお願いします。修正後に再提出してください。\n\n不備内容:\n`
           );
           break;
 
@@ -87,15 +87,15 @@ export default function ModalRevert({
     if (sendMessage.status === 200) {
       switch (revertData.reportPattern) {
         // 勤務表
-        case ReportPattern.dailyReport.code:
-          await axios.post("/api/approval/update/dailyReport", {
+        case ReportPattern.attendance.code:
+          await axios.post("/api/approval/update/attendance", {
             id: revertData.id,
             yearMonth: yearAndMonth,
-            approve: ApprovalStatusDailyReport.reinput.code,
+            approve: ApprovalStatusAttendance.reinput.code,
           });
           break;
 
-        // 旅費精算表
+        // 交通費精算表
         case ReportPattern.settlement.code:
           await axios.post("/api/approval/update/settlement", {
             id: revertData.id,

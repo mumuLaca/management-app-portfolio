@@ -23,7 +23,7 @@ const fetcher: Fetcher<Employee[], string> = (url) =>
 
 /**
  * @description
- * ユーザー情報更新‗メインコンポーネント
+ * メンバー情報更新‗メインコンポーネント
  */
 export default function UpdateUserMain() {
   const [updatedEmployees, setUpdatedEmployees] = useState<Employee[] | null>();
@@ -34,7 +34,7 @@ export default function UpdateUserMain() {
   // セッション情報取得
   const { data: session, status: sessionStatus } = useSession();
 
-  // 社員情報の全件取得
+  // メンバー情報の全件取得
   const {
     data: employees,
     error,
@@ -118,7 +118,7 @@ export default function UpdateUserMain() {
     }
   };
 
-  /** ユーザー検索 */
+  /** メンバー検索 */
   const handleSearch = () => {
     let filterRecords = employees;
     const setUpIds: number[] = [];
@@ -129,7 +129,7 @@ export default function UpdateUserMain() {
       return;
     }
 
-    // 全社員情報を検索ワードでフィルタリング
+    // 全メンバー情報を検索ワードでフィルタリング
     filterRecords = employees!.filter((record) =>
       record.name.includes(searchName)
     );
@@ -153,7 +153,7 @@ export default function UpdateUserMain() {
     setUpdatedEmployees(setData);
   };
 
-  /** 社員情報更新 */
+  /** メンバー情報更新 */
   const updateEmployee = async () => {
     const updateData = updatedEmployees?.filter((employee) =>
       updateIDs.includes(employee.id)
@@ -212,7 +212,7 @@ export default function UpdateUserMain() {
             </colgroup>
             <thead>
               <tr>
-                <th>社員番号</th>
+                <th>メンバー番号</th>
                 <th>氏名</th>
                 <th>メールアドレス</th>
                 <th>所属</th>

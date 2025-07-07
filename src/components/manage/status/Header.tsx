@@ -72,8 +72,8 @@ export default function Header({
   /** useEffect_実行するCSVダウンロードAPI */
   useEffect(() => {
     switch (filterReport) {
-      case ReportPattern.dailyReport.code:
-        setActionAPI("/api/csv/dailyReport");
+      case ReportPattern.attendance.code:
+        setActionAPI("/api/csv/attendance");
         break;
       case ReportPattern.settlement.code:
         setActionAPI("/api/csv/settlement");

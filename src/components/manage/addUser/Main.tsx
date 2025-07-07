@@ -22,14 +22,14 @@ const radios = [
 
 /**
  * @description
- * ユーザー追加‗メインコンポーネント
+ * メンバー追加‗メインコンポーネント
  */
 export default function AddUserMain() {
   const [alertHTML, setAlertHTML] = React.useState<ReactElement | null>(null);
   const [adminValue, setAdminValue] = React.useState("0");
   const router = useRouter();
 
-  // 社員情報登録
+  // メンバー情報登録
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -104,7 +104,7 @@ export default function AddUserMain() {
         <Form className="px-5 manageEntryComponent" onSubmit={handleSubmit}>
           {alertHTML}
           <Form.Group className="mb-4">
-            <Form.Label className="fs-5">社員番号</Form.Label>
+            <Form.Label className="fs-5">メンバー番号</Form.Label>
             <Form.Control
               type="text"
               name="employeeId"

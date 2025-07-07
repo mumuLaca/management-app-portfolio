@@ -3,12 +3,12 @@ import styles from "@/styles/Help.module.css";
 
 /**
  * @description
- * ヘルプページ_ユーザー削除
+ * ヘルプページ_メンバー削除
  */
 export default function PageDeleteUser() {
   return (
     <>
-      <h3 className={styles.cmnPageTitle}>ユーザー削除</h3>
+      <h3 className={styles.cmnPageTitle}>メンバー削除</h3>
       <ul className={styles.CUlStyle}>
         <li>
           <h5>削除単位</h5>

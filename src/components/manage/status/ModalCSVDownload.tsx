@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
   ReportPattern,
@@ -90,8 +90,8 @@ export default function ModalCSVDownload({
                 >
                   <option value={""}>全て</option>
                   {Object.values(
-                    filterReport === ReportPattern.dailyReport.code
-                      ? ApprovalStatusDailyReport
+                    filterReport === ReportPattern.attendance.code
+                      ? ApprovalStatusAttendance
                       : filterReport === ReportPattern.settlement.code
                       ? ApprovalStatusSettlement
                       : ApprovalStatusReimbursement

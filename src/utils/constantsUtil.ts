@@ -1,7 +1,7 @@
 import {
   AbsentData,
   AdminRights,
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   WorkStyle,
   TravelMethod,
   ApprovalStatusSettlement,
@@ -52,18 +52,18 @@ export const getAbsentDataKey = (codeFind: string): AbsentDataKeys => {
 };
 
 /** 勤務表_承認状況のcodeに対応するkeyを返却 */
-export const getApprovalDailyReportKey = (
+export const getApprovalAttendanceKey = (
   codeFind: string
 ): ApprovalStatusDRKeys => {
-  const entry = Object.entries(ApprovalStatusDailyReport).find(
+  const entry = Object.entries(ApprovalStatusAttendance).find(
     ([, value]) => value.code === codeFind
   );
   return entry
     ? (entry[0] as ApprovalStatusDRKeys)
-    : (Object.keys(ApprovalStatusDailyReport)[0] as ApprovalStatusDRKeys);
+    : (Object.keys(ApprovalStatusAttendance)[0] as ApprovalStatusDRKeys);
 };
 
-/** 旅費精算表_承認状況のcodeに対応するkeyを返却 */
+/** 交通費精算表_承認状況のcodeに対応するkeyを返却 */
 export const getApprovalSettlementKey = (
   codeFind: string
 ): ApprovalStatusStlKeys => {

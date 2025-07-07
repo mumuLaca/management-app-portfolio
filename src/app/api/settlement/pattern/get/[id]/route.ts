@@ -3,7 +3,7 @@ import prisma from "@/lib/prismadb";
 
 /**
  * @description
- * 旅費精算登録パターン取得
+ * 交通費精算登録パターン取得
  * @param request request data
  * @param context route parameters
  */
@@ -27,7 +27,7 @@ export async function GET(
 
     if (result === null) {
       return NextResponse.json(
-        { message: "旅費精算登録パターンの取得に失敗しました" },
+        { message: "交通費精算登録パターンの取得に失敗しました" },
         { status: 400 }
       );
     }
@@ -36,7 +36,7 @@ export async function GET(
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { message: "旅費精算登録パターンの取得に失敗しました" },
+      { message: "交通費精算登録パターンの取得に失敗しました" },
       { status: 400 }
     );
   }

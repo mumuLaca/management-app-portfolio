@@ -31,7 +31,7 @@ export default function ModalReimbursement({
   employee,
   yearMonth,
 }: Props) {
-  // 旅費精算関連データ取得
+  // 交通費精算関連データ取得
   const { data, error, mutate, isLoading } = useSWR(
     yearMonth && employee?.id
       ? `/api/reimbursement/get/${yearMonth}/${employee.id}`

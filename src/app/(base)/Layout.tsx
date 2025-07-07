@@ -48,7 +48,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               sidebarShow={sidebarShow}
               setSidebarShow={setSidebarShow}
             />
-            <main className={`mainComponent ${scrollStyle.dailyScrollStyle}`}>
+            <main
+              className={`mainComponent ${scrollStyle.attendanceScrollStyle}`}
+            >
               {children}
             </main>
           </div>

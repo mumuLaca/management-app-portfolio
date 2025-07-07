@@ -21,7 +21,7 @@ type Props = {
 
 /**
  * @description
- * 旅費精算パターン登録用モーダル
+ * 交通費精算パターン登録用モーダル
  */
 export default function ModalPatternEntry({
   modalOpenFlg,

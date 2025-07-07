@@ -23,7 +23,7 @@ const fetcher: Fetcher<TypeMonthlySettlement, string> = (url) =>
 
 /**
  * @description
- * 旅費精算表（参照用）モーダル
+ * 交通費精算表（参照用）モーダル
  */
 export default function ModalSettlement({
   settlementModalOpenFlg,
@@ -31,7 +31,7 @@ export default function ModalSettlement({
   employee,
   yearMonth,
 }: Props) {
-  // 旅費精算関連データ取得
+  // 交通費精算関連データ取得
   const { data, error, mutate, isLoading } = useSWR(
     yearMonth && employee?.id
       ? `/api/settlement/get/${yearMonth}/${employee.id}`
@@ -68,7 +68,7 @@ export default function ModalSettlement({
       >
         <Modal.Title>
           <MdCardTravel />
-          <span className="ms-2">旅費精算表（参照用）</span>
+          <span className="ms-2">交通費精算表（参照用）</span>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={`my-3 h-auto ${styles.scrollHidden}`}>

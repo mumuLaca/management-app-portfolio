@@ -7,11 +7,11 @@ export const MESSAGE: MessageList = {
   IM0002: {
     kind: "info",
     message:
-      "当月の旅費精算表は管理本部承認済です。訂正が必要な場合は管理本部へご連絡ください。",
+      "当月の交通費精算表は管理本部承認済です。訂正が必要な場合は管理本部へご連絡ください。",
   },
   SM0001: {
     kind: "success",
-    message: "旅費精算の登録が完了しました。",
+    message: "交通費精算の登録が完了しました。",
   },
   SM0002: {
     kind: "success",

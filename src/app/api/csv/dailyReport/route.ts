@@ -30,7 +30,7 @@ interface outputObject {
 
 // CSVレイアウトヘッダー
 const csvHeader = [
-  "社員番号",
+  "メンバー番号",
   "氏名",
   "所属",
   "報告年月",
@@ -70,12 +70,12 @@ export async function GET(request: NextRequest) {
 
     let outputCSV: unknown[] = [];
 
-    // 承認済の社員情報を取得
+    // 承認済のメンバー情報を取得
     const approvals = await prisma.approval.findMany({
       where: {
         yearMonth: ym,
         ...(approvalStatus !== "" && {
-          statusOfDailyReport: approvalStatus,
+          statusOfAttendance: approvalStatus,
         }),
         ...(filterSection !== "" && {
           employee: {
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       // 承認済データが存在しない場合
     } else {
       // DB操作
-      const result = await prisma.dailyReport.findMany({
+      const result = await prisma.attendance.findMany({
         where: {
           date: {
             gte: currentMonth.toDate(),
@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
 
       const outputData: outputObject = {};
 
-      // 社員別に集計を行い配列に格納
+      // メンバー別に集計を行い配列に格納
       for (const row of result) {
         const { employeeId, absentCode, workStyle } = row;
 
@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
     // CSV出力処理
     return new NextResponse(csvData, {
       headers: {
-        "Content-Disposition": `attachment; filename=${ym}_${now}_dailyReport.csv`,
+        "Content-Disposition": `attachment; filename=${ym}_${now}_attendance.csv`,
         "Content-Type": "text/csv; charset=Shift_JIS",
       },
     });

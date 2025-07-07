@@ -44,7 +44,7 @@ export async function GET(
         },
       },
       select: {
-        statusOfDailyReport: true,
+        statusOfAttendance: true,
       },
     });
 
@@ -59,8 +59,8 @@ export async function GET(
       );
     }
 
-    // 社員IDに紐づく勤務表データを取得
-    const dailyReportList = await prisma.dailyReport.findMany({
+    // メンバーIDに紐づく勤務表データを取得
+    const attendanceList = await prisma.attendance.findMany({
       where: {
         AND: [
           {
@@ -80,7 +80,7 @@ export async function GET(
     });
 
     // 返却用データを作成
-    const customDailyReport = dailyReportList.map((row) => {
+    const customAttendance = attendanceList.map((row) => {
       // 各計算結果を変数に保存
       const activeTime = calcActiveTime(row); // 稼働時間
       const overTime = calcOverTime(row); //残業時間
@@ -101,8 +101,8 @@ export async function GET(
     // 取得結果を返却
     return NextResponse.json({
       yearMonth: yearMonth,
-      approvalStatus: approvalData?.statusOfDailyReport,
-      list: [...customDailyReport],
+      approvalStatus: approvalData?.statusOfAttendance,
+      list: [...customAttendance],
     });
   } catch (err) {
     console.error(err);

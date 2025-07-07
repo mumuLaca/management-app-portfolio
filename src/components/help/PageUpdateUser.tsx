@@ -3,16 +3,16 @@ import styles from "@/styles/Help.module.css";
 
 /**
  * @description
- * ヘルプページ_ユーザー更新
+ * ヘルプページ_メンバー更新
  */
 export default function PageUpdateUser() {
   return (
     <>
-      <h3 className={styles.cmnPageTitle}>ユーザー更新</h3>
+      <h3 className={styles.cmnPageTitle}>メンバー更新</h3>
       <ul className={styles.CUlStyle}>
         <li>
           <h5>更新方法</h5>
-          <span>複数社員情報の一括変更が可能です。</span>
+          <span>複数メンバー情報の一括変更が可能です。</span>
           <br />
           <span>変更点はカラーリングされる。</span>
         </li>
@@ -26,9 +26,9 @@ export default function PageUpdateUser() {
         <li>
           <h5>フィルタリング</h5>
           <span>
-            フィルタリングされた社員情報のみが更新対象です。
+            フィルタリングされたメンバー情報のみが更新対象です。
             <br />
-            修正した社員がフィルタリングにより非表示となった場合、更新対象に含まれません。
+            修正したメンバーがフィルタリングにより非表示となった場合、更新対象に含まれません。
           </span>
         </li>
       </ul>

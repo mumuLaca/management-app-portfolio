@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
 import {
-  ApprovalStatusDailyReport,
+  ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
   ApprovalStatusSettlement,
 } from "@/lib/constants";
@@ -14,7 +14,7 @@ export type TypeAPIResponse = {
   admin: string;
   yearMonth: string;
   totalActive: number;
-  statusOfDailyReport: string;
+  statusOfAttendance: string;
   statusOfSettlement: string;
   statusOfReimbursement: string;
 };
@@ -65,7 +65,7 @@ export async function GET(
           },
           select: {
             totalActive: true,
-            statusOfDailyReport: true,
+            statusOfAttendance: true,
             statusOfSettlement: true,
             statusOfReimbursement: true,
           },
@@ -83,10 +83,10 @@ export async function GET(
         ? employee.approval[0].totalActive
         : 0,
       // 承認状況（勤務表）
-      statusOfDailyReport: employee.approval?.length
-        ? employee.approval[0].statusOfDailyReport
-        : ApprovalStatusDailyReport.unapproved.code,
-      // 承認状況（旅費精算表）
+      statusOfAttendance: employee.approval?.length
+        ? employee.approval[0].statusOfAttendance
+        : ApprovalStatusAttendance.unapproved.code,
+      // 承認状況（交通費精算表）
       statusOfSettlement: employee.approval?.length
         ? employee.approval[0].statusOfSettlement
         : ApprovalStatusSettlement.noInput.code,

@@ -17,7 +17,7 @@ const fetcher: Fetcher<Employee[], string> = (url) =>
 
 /**
  * @description
- * ユーザー削除‗メインコンポーネント
+ * メンバー削除‗メインコンポーネント
  */
 export default function DeleteUserMain() {
   const [filterEmployees, setFilterEmployees] = useState<Employee[] | null>();
@@ -29,7 +29,7 @@ export default function DeleteUserMain() {
   // セッション情報取得
   const { data: session, status: sessionStatus } = useSession();
 
-  // 社員情報の全件取得
+  // メンバー情報の全件取得
   const {
     data: employees,
     error,
@@ -110,7 +110,7 @@ export default function DeleteUserMain() {
           <thead>
             <tr>
               <th>削除</th>
-              <th>社員番号</th>
+              <th>メンバー番号</th>
               <th>氏名</th>
               <th>メールアドレス</th>
               <th>所属</th>

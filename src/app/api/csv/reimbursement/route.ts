@@ -14,7 +14,7 @@ interface outputReimbursement extends Reimbursement {
 
 // CSVレイアウトヘッダー
 const csvHeader = [
-  "社員番号",
+  "メンバー番号",
   "氏名",
   "#",
   "対象年月",
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
     let outputCSV: unknown[] = [];
 
-    // 承認済の社員情報を取得
+    // 承認済のメンバー情報を取得
     const approvals = await prisma.approval.findMany({
       where: {
         yearMonth: ym,
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
         orderBy: [{ date: "asc" }, { tno: "asc" }],
       });
 
-      // 取得データを社員ごとに整理する
+      // 取得データをメンバーごとに整理する
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const groupData: { [key: number]: any } = {};
       result.forEach((record) => {
@@ -116,7 +116,7 @@ export async function GET(request: NextRequest) {
           0
         );
 
-        // 集計レコードを各社員レコードの先頭に配置
+        // 集計レコードを各メンバーレコードの先頭に配置
         group.unshift({
           employeeId: Number(key),
           name: group[0].employee.name,

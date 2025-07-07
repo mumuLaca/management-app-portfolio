@@ -73,7 +73,7 @@ export default function List({
     }
   }, [reimbursementData, editable, setInputCheck, mutateSettlement]);
 
-  /** ユーザーが編集可能かどうかを判定 */
+  /** メンバーが編集可能かどうかを判定 */
   const isUserEditable = () => {
     // 承認状況が「申請なし」「入力中」「差戻中」の場合は編集可能とする
     return [

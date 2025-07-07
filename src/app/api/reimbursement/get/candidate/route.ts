@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     if (!id) {
       return NextResponse.json(
-        { message: "社員IDが指定されていません" },
+        { message: "メンバーIDが指定されていません" },
         { status: 400 }
       );
     }
