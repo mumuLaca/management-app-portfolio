@@ -3,7 +3,7 @@ import "flatpickr/dist/flatpickr.min.css";
 import { Dispatch, useCallback, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 import Calendar from "./Calendar";
 import JoinUser from "./JoinUser";
 import ModalMessageForm from "../common/ModalMessageForm";

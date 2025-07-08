@@ -179,7 +179,7 @@ export default function ModalEntry({
     // パラメーターセット
     const data = {
       employeeId: employee.id,
-      tno: entryData?.entryFlg === EntryFlg.update ? entryData.tno : null,
+      tno: entryData?.entryFlg === EntryFlg.update ? entryData?.tno : null,
       displayNo: entryData?.displayNo,
       targetDate: targetDates.map((value) => dayjs(value).format("YYYY-MM-DD")),
       form: settlementForm,
@@ -427,7 +427,7 @@ export default function ModalEntry({
                   value={settlementForm}
                   onChange={(e) => setSettlementForm(e.target.value)}
                 >
-                  {Object.values(SettlementForm).map((obj) => (
+                  {(Object.values(SettlementForm) as any[]).map((obj) => (
                     <option key={obj.code} value={obj.code}>
                       {obj.method}
                     </option>
@@ -442,7 +442,7 @@ export default function ModalEntry({
                   value={method}
                   onChange={(e) => handleChangeMethod(e)}
                 >
-                  {Object.values(TravelMethod).map((obj) => (
+                  {(Object.values(TravelMethod) as any[]).map((obj) => (
                     <option key={obj.code} value={obj.code}>
                       {obj.method}
                     </option>

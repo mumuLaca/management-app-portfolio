@@ -1,11 +1,7 @@
-import { Employee, RoomMember } from "@prisma/client";
+import { Employee } from "@prisma/client";
 import "flatpickr/dist/flatpickr.min.css";
-import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, useEffect, useRef, useState, JSX } from "react";
 import Modal from "react-bootstrap/Modal";
-import { MdOutlinePlaylistAdd } from "react-icons/md";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
-import Calendar from "./Calendar";
-import JoinUser from "./JoinUser";
 import { LuCalendarRange } from "react-icons/lu";
 import {
   Alert,
@@ -27,6 +23,7 @@ import { FaTimesCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import { ApprovalStatusDailyReport } from "@/lib/constants";
 import { BsQuestionCircle } from "react-icons/bs";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 
 type Props = {
   changeApprovalStatus: string; // 承認ステータス
@@ -325,11 +322,11 @@ function MessageForm({
   };
 
   /** 候補リスト選択時処理 */
-  const handleSuggestionClick = (user: any) => {
-    setSelectAddressList((prevList: any) => {
+  const handleSuggestionClick = (user: Employee) => {
+    setSelectAddressList((prevList: Employee[]) => {
       if (
         user.id !== (session?.employee.id ?? 0) &&
-        prevList.every((obj: any) => obj.id !== user.id)
+        prevList.every((obj: Employee) => obj.id !== user.id)
       ) {
         return [...prevList, user];
       }
@@ -340,9 +337,9 @@ function MessageForm({
   };
 
   /** 候補リスト削除時処理 */
-  const suggestionsDelete = (mention: any) => () => {
-    setSelectAddressList((prevList: any) =>
-      prevList.filter((obj: any) => obj.id !== mention.id)
+  const suggestionsDelete = (mention: Employee) => () => {
+    setSelectAddressList((prevList: Employee[]) =>
+      prevList.filter((obj: Employee) => obj.id !== mention.id)
     );
   };
 
@@ -371,7 +368,10 @@ function MessageForm({
               value={addressText}
               onFocus={() => setShowAddressListFlg(true)}
               onChange={(e) => handleChange(e)}
-              onCompositionEnd={(e) => handleChange(e as any)}
+              onCompositionEnd={(e) => {
+                const target = e.target as HTMLInputElement;
+                handleChange({ target } as React.ChangeEvent<HTMLInputElement>);
+              }}
               placeholder="宛先を入力し選択"
               className={styles.mentionInput}
             />
@@ -402,7 +402,7 @@ function MessageForm({
 
               return (
                 <div key={rowIndex} className={styles.menttionRow}>
-                  {group.map((mention: any, index: number) => (
+                  {group.map((mention: Employee, index: number) => (
                     <div key={index} className={styles.mentionMember}>
                       <span className="me-1">{mention.name}</span>
                       <FaTimesCircle

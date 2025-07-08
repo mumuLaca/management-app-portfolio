@@ -5,10 +5,11 @@ import React, {
   Dispatch,
   useMemo,
   useCallback,
+  JSX,
 } from "react";
 import styles from "@/styles/DailyReport.module.css";
 import { Alert, Badge, Button, ButtonGroup, Spinner } from "react-bootstrap";
-import useSWR, { Fetcher, mutate as globalMutate } from "swr";
+import useSWR, { Fetcher } from "swr";
 import axios from "axios";
 import dayjs from "dayjs";
 import {
@@ -25,12 +26,11 @@ import {
   DailyReportPost,
   Issue,
   PostSection,
-  RoomMember,
   SectionComment,
 } from "@prisma/client";
 import { MdOutlineUpdate } from "react-icons/md";
 import Tweet from "./Tweet";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 import { LuClipboardCopy } from "react-icons/lu";
 import { LuClipboardPaste } from "react-icons/lu";
 import isEqual from "lodash/isEqual";
@@ -136,18 +136,16 @@ export default function TweetArea({
   const [issuesChangeFlg, setIssuesChangeFlg] = useState<boolean>(true);
   const [issueModalOpenFlg, setIssueModalOpenFlg] = useState<boolean>(false);
   const [switchTabFlg, setSwitchTabFlg] = useState<boolean>(true); // ツイート、課題一覧のタブ切り替えフラグ
-  const [msg, setMsg] = useState<JSX.Element>(<></>);
+
   const [issueCRUDFlg, setIssueCRUDFlg] = useState(""); // 課題CRUDフラグ
   const [targetIssue, setTargetIssue] = useState<Issue | undefined>(undefined); // 課題CRUD対象の課題
   const [authority, setAuthority] = useState<string>(""); // 部屋主の権限情報
 
-  const { roomId, dailyReportType, fromDate, toDate } =
-    urlParams as DailyReportCommonUrlParams;
+  const { roomId, dailyReportType } = urlParams as DailyReportCommonUrlParams;
   const formattedDate = useMemo(() => dayjs(date).format("YYYY-MM-DD"), [date]);
 
   const {
     data: tweetData,
-    error,
     mutate,
     isLoading,
   } = useSWR(
@@ -363,7 +361,7 @@ export default function TweetArea({
         });
 
       // 画面更新
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -640,7 +638,6 @@ export default function TweetArea({
           <Issues
             switchTabFlg={switchTabFlg}
             issues={issues}
-            setMsg={setMsg}
             setIssueModalOpenFlg={setIssueModalOpenFlg}
             setTargetIssue={setTargetIssue}
             setIssueCRUDFlg={setIssueCRUDFlg}

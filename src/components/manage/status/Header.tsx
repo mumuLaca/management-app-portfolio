@@ -149,7 +149,7 @@ export default function Header({
                 onChange={(e) => setFilterReport(e.target.value)}
               >
                 <>
-                  {Object.values(ReportPattern).map((obj, index) => (
+                  {(Object.values(ReportPattern) as any[]).map((obj, index) => (
                     <option key={index} value={obj.code}>
                       {obj.name}
                     </option>

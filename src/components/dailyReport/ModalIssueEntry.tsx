@@ -1,12 +1,11 @@
 import { CodeCRUD, IssueStatus } from "@/lib/constants";
-import { TypeAPIResponse } from "@/pages/api/approval/get/status/[...params]";
-import { getCodeCRUDKey, getIssueStatusKey } from "@/utils/constantsUtil";
+import { getCodeCRUDKey } from "@/utils/constantsUtil";
 import { Issue } from "@prisma/client";
 import axios from "axios";
 import dayjs from "dayjs";
 import "flatpickr/dist/flatpickr.min.css";
 import { Japanese } from "flatpickr/dist/l10n/ja.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, JSX } from "react";
 import {
   Alert,
   Button,
@@ -16,15 +15,10 @@ import {
   Form,
   InputGroup,
   Row,
-  Table,
 } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import FlatPickr from "react-flatpickr";
-import { FaList } from "react-icons/fa";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
-import { KeyedMutator } from "swr";
-import { CombinedDailyReportPostProps, Section } from "./TweetArea";
-import { set } from "lodash";
 
 type Props = {
   targetIssue: Issue | undefined;
@@ -206,7 +200,7 @@ export default function ModalIssueEntry({
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                {Object.values(IssueStatus).map((status, index) => (
+                {(Object.values(IssueStatus) as any[]).map((status, index) => (
                   <option key={index} value={status.code}>
                     {status.caption}
                   </option>

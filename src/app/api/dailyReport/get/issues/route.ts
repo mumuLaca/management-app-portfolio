@@ -1,19 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prismadb";
 
 /**
  * @description
  * 課題情報取得API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(request: Request) {
   // リクエストからのクエリパラメータを取得
-  const { roomId } = req.query;
+  const { searchParams } = new URL(request.url);
+  const roomId = searchParams.get("roomId");
 
   try {
     // ルームIDを使用して、課題情報を取得
@@ -28,9 +24,9 @@ export default async function handler(
       ],
     });
 
-    return res.status(200).json(issues);
+    return Response.json(issues, { status: 200 });
   } catch (error) {
     console.error("Error fetching post:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }

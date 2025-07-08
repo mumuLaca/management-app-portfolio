@@ -1,8 +1,6 @@
 import styles from "@/styles/DailyReport.module.css";
 import { RoomMember } from "@prisma/client";
 import { DailyReportAuthority } from "@/lib/constants";
-import { useCallback, useState } from "react";
-import ModalMessageForm from "../common/ModalMessageForm";
 
 interface Proprs {
   joinUsers: RoomMember[];

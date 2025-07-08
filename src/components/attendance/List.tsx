@@ -26,6 +26,7 @@ import styles from "@/styles/Attendance.module.css";
 import AllEntry from "@/components/attendance/AllEntry";
 import ModalEntry from "./ModalEntry";
 import { Employee } from "@prisma/client";
+import type { WorkStyleKeys } from "@/types/types";
 
 type Props = {
   employee: Employee;
@@ -191,7 +192,9 @@ export default function List({
           <td style={styleBackGround}>{item.overTime}</td>
           <td style={styleBackGround}>{item.lNOverTime}</td>
           <td style={styleBackGround}>{item.legalHolActive}</td>
-          <td style={styleBackGround}>{WorkStyle[item.workStyle].mean}</td>
+          <td style={styleBackGround}>
+            {WorkStyle[item.workStyle as WorkStyleKeys].mean}
+          </td>
           <td style={styleBackGround}>{item.absent}</td>
           <td style={styleBackGround}>{item.note}</td>
         </tr>

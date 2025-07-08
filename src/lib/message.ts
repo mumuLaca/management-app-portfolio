@@ -1,3 +1,5 @@
+import type { MessageList } from "@/types/types";
+
 export const MESSAGE: MessageList = {
   IM0001: {
     kind: "info",

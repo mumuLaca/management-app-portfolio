@@ -1,21 +1,19 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prismadb";
 import dayjs from "dayjs";
-import { DiaryType } from "@/lib/constants";
+import { DailyReportType } from "@/lib/constants";
 
 /**
  * @description
  * カレンダー情報取得API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(request: Request) {
   // リクエストクエリから必要なデータを取得
-  const { roomId, date, diaryType } = req.query;
+  const { searchParams } = new URL(request.url);
+  const roomId = searchParams.get("roomId");
+  const date = searchParams.get("date");
+  const dailyReportType = searchParams.get("dailyReportType");
 
   // クエリパラメータから取得した日付をUTCに変換し、月の初日と次の月の初日を取得
   const currentMonth = dayjs.utc(date as string).startOf("month");
@@ -24,15 +22,15 @@ export default async function handler(
   let gteDate = new Date();
   let ltDate = new Date();
 
-  // diaryTypeに応じて取得する日付の範囲を設定
-  switch (diaryType) {
-    case DiaryType.daily.code:
-    case DiaryType.weekly.code:
+  // dailyReportTypeに応じて取得する日付の範囲を設定
+  switch (dailyReportType) {
+    case DailyReportType.daily.code:
+    case DailyReportType.weekly.code:
       gteDate = currentMonth.toDate();
       ltDate = nextMonth.toDate();
       break;
-    case DiaryType.monthly.code:
-    case DiaryType.quarter.code:
+    case DailyReportType.monthly.code:
+    case DailyReportType.quarter.code:
       let targetYear = currentMonth.year();
       if (currentMonth.month() < 3) {
         targetYear = currentMonth.year() - 1;
@@ -46,7 +44,7 @@ export default async function handler(
   try {
     // 日報の取得処理
     // roomIdと日付範囲に基づいて、該当する日報を取得
-    const result = await prisma.diaryPost.findMany({
+    const result = await prisma.dailyReportPost.findMany({
       where: {
         AND: [
           {
@@ -69,9 +67,9 @@ export default async function handler(
       },
     });
 
-    return res.status(200).json(result);
+    return Response.json(result, { status: 200 });
   } catch (error) {
     console.error("Error fetching post:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }

@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import slackIcon from "@/app/Slack-mark-RGB.png";
+import slackIcon from "@/app/slackIcon.png";
 import styles from "@/styles/Login.module.css";
 import actIcon from "@/app/logo.png";
 

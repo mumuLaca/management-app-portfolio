@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prismadb";
 import dayjs from "dayjs";
 
@@ -6,16 +5,17 @@ import dayjs from "dayjs";
  * @description
  * 日報‗取得API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
+ * @param params URL parameters
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ params: string[] }> }
 ) {
   try {
     // クエリパラメータから必要なデータを取得
-    const [roomId, date, employeeId] = <string[]>req.query.params;
+    const resolvedParams = await params;
+    const [roomId, date, employeeId] = resolvedParams.params;
     // クエリパラメータから取得した日付をUTCに変換し、開始日と終了日を取得
     const startOfDay = dayjs
       .utc(date as string)
@@ -27,7 +27,7 @@ export default async function handler(
       .toDate();
 
     // 日報の取得処理
-    const post = await prisma.diaryPost.findFirst({
+    const post = await prisma.dailyReportPost.findFirst({
       where: {
         roomId: roomId,
         date: {
@@ -73,9 +73,9 @@ export default async function handler(
       authority: memberInfo?.authority ?? "",
     };
 
-    return res.status(200).json(result);
+    return Response.json(result, { status: 200 });
   } catch (error) {
     console.error("Error fetching post:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }

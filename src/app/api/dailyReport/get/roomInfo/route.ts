@@ -1,19 +1,15 @@
 import prisma from "@/lib/prismadb";
-import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @description
  * ルーム情報取得API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(request: Request) {
   // リクエストからのクエリパラメータを取得
-  const { searchName } = req.query;
+  const { searchParams } = new URL(request.url);
+  const searchName = searchParams.get("searchName");
 
   try {
     // ルーム情報を取得
@@ -41,9 +37,9 @@ export default async function handler(
       },
     });
 
-    res.status(200).json(result);
+    return Response.json(result, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }

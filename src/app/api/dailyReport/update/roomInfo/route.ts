@@ -1,23 +1,24 @@
 import prisma from "@/lib/prismadb";
 import { Employee } from "@prisma/client";
 import dayjs from "dayjs";
-import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @description
  * ルーム情報更新API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { roomId, employeeId, fromDate, toDate, trainerList, officeStaffList } =
-    req.body;
-
+export async function POST(request: Request) {
   try {
+    const {
+      roomId,
+      employeeId,
+      fromDate,
+      toDate,
+      trainerList,
+      officeStaffList,
+    } = await request.json();
+
     await prisma.$transaction(async (prisma) => {
       await prisma.roomInfo.update({
         where: {
@@ -103,9 +104,9 @@ export default async function handler(
       }
     });
 
-    res.status(200).json(null);
+    return new Response(null, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }

@@ -15,7 +15,7 @@ interface DailyReportAdminProps extends Employee {
 
 export default function Dashboard({ session }: { session: Session }) {
   const [employeeList, setEmployeeList] = useState<DailyReportAdminProps[]>([]);
-  const [msg, setMsg] = useState<JSX.Element>(<></>);
+  const [msg, setMsg] = useState<React.JSX.Element>(<></>);
 
   useEffect(() => {
     const getInformations = async () => {

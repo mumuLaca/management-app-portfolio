@@ -22,6 +22,7 @@ import { PatternEntryData } from "../settlement/List";
 import { Employee } from "@prisma/client";
 import { MESSAGE } from "@/lib/message";
 import { TbFileReport } from "react-icons/tb";
+import type { WorkStyleKeys } from "@/types/types";
 
 type Props = {
   entryModalOpenFlg: boolean;
@@ -94,7 +95,7 @@ export default function ModalEntry({
     setStartTime(entryItem.startTime);
     setEndTime(entryItem.endTime);
     setRest(entryItem.rest);
-    setWorkStyle(WorkStyle[entryItem.workStyle].code);
+    setWorkStyle(WorkStyle[entryItem.workStyle as WorkStyleKeys].code);
     setAbsentCode(entryItem.absentCode || "000");
     setNote(entryItem.note);
 
@@ -168,11 +169,15 @@ export default function ModalEntry({
 
     // 不就業区分が「終日」であれば時刻と休憩時間をクリアする
     if (
-      Object.values(AbsentData).find(
-        (ab) =>
-          ab.code === e.target.value &&
-          (ab.allday === true || ab.code === AbsentData.companyEvent.code)
-      )
+      Object.values(AbsentData).find((ab) => {
+        const absentObj =
+          ab as import("@/types/types").TypeAbsentData[keyof import("@/types/types").TypeAbsentData];
+        return (
+          absentObj.code === e.target.value &&
+          (absentObj.allday === true ||
+            absentObj.code === AbsentData.companyEvent.code)
+        );
+      })
     ) {
       setWorkStyle(WorkStyle.none.code);
       setStartTime("");
@@ -213,6 +218,9 @@ export default function ModalEntry({
     },
     [setSettlementEntryCompFlg, setSettlementEntryFlg, setEntryModalOpenFlg]
   );
+
+  // AbsentDataの型付きリストを作成
+  const absentList = Object.values(AbsentData) as any[];
 
   return (
     <>
@@ -327,9 +335,10 @@ export default function ModalEntry({
               <Form.Group className="mb-3" as={Col}>
                 <Form.Label>区分</Form.Label>
                 <Form.Select value={absentCode} onChange={handleChangeAbsent}>
-                  {Object.values(AbsentData)
-                    .filter((obj) => obj.code !== "700")
-                    .map((ab) => (
+                  {/* @ts-ignore */}
+                  {absentList
+                    .filter((obj: any) => obj.code !== "700")
+                    .map((ab: any) => (
                       <option key={ab.code} value={ab.code}>
                         {ab.caption}
                       </option>

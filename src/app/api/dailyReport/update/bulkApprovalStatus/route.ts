@@ -1,31 +1,26 @@
-import { ApprovalStatusDiary } from "@/lib/constants";
+import { ApprovalStatusDailyReport } from "@/lib/constants";
 import prisma from "@/lib/prismadb";
 import { WebClient } from "@slack/web-api";
 import dayjs from "dayjs";
-import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @description
  * 日報‗承認ステータス一括更新API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const {
-    roomId,
-    startDate,
-    endDate,
-    approvalStatus,
-    addressList,
-    content,
-    messageFormOpenFlg,
-  } = req.body;
-
+export async function POST(request: Request) {
   try {
+    const {
+      roomId,
+      startDate,
+      endDate,
+      approvalStatus,
+      addressList,
+      content,
+      messageFormOpenFlg,
+    } = await request.json();
+
     const getDate = dayjs
       .utc(startDate as string)
       .startOf("day")
@@ -39,24 +34,24 @@ export default async function handler(
 
     switch (approvalStatus) {
       // 提出
-      case ApprovalStatusDiary.submitted.code:
-        includeStatuses.push(ApprovalStatusDiary.noInput.code);
-        includeStatuses.push(ApprovalStatusDiary.saveTemporary.code);
+      case ApprovalStatusDailyReport.submitted.code:
+        includeStatuses.push(ApprovalStatusDailyReport.noInput.code);
+        includeStatuses.push(ApprovalStatusDailyReport.saveTemporary.code);
         break;
       // 育成担当承認
-      case ApprovalStatusDiary.firstApproval.code:
-        includeStatuses.push(ApprovalStatusDiary.submitted.code);
+      case ApprovalStatusDailyReport.firstApproval.code:
+        includeStatuses.push(ApprovalStatusDailyReport.submitted.code);
         break;
       // 本社担当承認
-      case ApprovalStatusDiary.secondApproval.code:
-        includeStatuses.push(ApprovalStatusDiary.firstApproval.code);
+      case ApprovalStatusDailyReport.secondApproval.code:
+        includeStatuses.push(ApprovalStatusDailyReport.firstApproval.code);
         break;
     }
 
     const statusCondition =
       includeStatuses.length > 0 ? { in: includeStatuses } : undefined;
 
-    await prisma.diaryPost.updateMany({
+    await prisma.dailyReportPost.updateMany({
       where: {
         roomId: String(roomId),
         date: {
@@ -88,10 +83,10 @@ export default async function handler(
       }
     }
 
-    res.status(200).json(null);
+    return new Response(null, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }
 

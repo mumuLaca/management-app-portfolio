@@ -64,6 +64,7 @@ model Employee {
   basicWorkStyle      String   @default("1")
   createdAt           DateTime @default(now()) @db.Timestamp(0)
   updatedAt           DateTime @updatedAt @db.Timestamp(0)
+  dailyReportAuthority      String   @default("0")
   attendance Attendance[]
   settlement Settlement[]
   settlementPattern SettlementPattern[]

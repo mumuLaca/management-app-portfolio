@@ -4,6 +4,7 @@ import { MODALMESSAGEKINDCOLOR } from "@/lib/modalMessage";
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Modal } from "react-bootstrap";
 import parse from "html-react-parser";
+import type { ModalMessage } from "@/types/types";
 
 type Props = {
   modalMessage: ModalMessage;

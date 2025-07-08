@@ -9,7 +9,7 @@ import ModalConfirm from "@/components/modal/ModalConfirm";
 import { MODALMESSAGE } from "@/lib/modalMessage";
 import styles from "@/styles/DailyReport.module.css";
 import ModalBulkApproval from "./ModalBulkApproval";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 
 type Props = {
   approvalStatus: string; // 承認ステータス
@@ -39,8 +39,7 @@ export default function ApprovalButton({
   const [modalSAOpenFlg, setModalSAOpenFlg] = useState(false); // 範囲承認モーダルのオープンフラグ
   const [changeApprovalStatus, setChangeApprovalStatus] = useState<string>(""); // 承認ステータス
 
-  const { roomId, dailyReportType, fromDate, toDate } =
-    urlParams as DailyReportCommonUrlParams; // URLパラメータ
+  const { dailyReportType } = urlParams as DailyReportCommonUrlParams; // URLパラメータ
 
   let button = <></>;
 

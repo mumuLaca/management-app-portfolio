@@ -1,6 +1,5 @@
 import prisma from "@/lib/prismadb";
 import { nanoid } from "nanoid";
-import { NextApiRequest, NextApiResponse } from "next";
 
 interface Section {
   title: string;
@@ -12,16 +11,14 @@ interface Section {
  * @description
  * 週報、四半期報カバー登録API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // リクエストボディから必要なデータを取得
-  const { postId, roomId, yearMonth, diaryType, sections } = req.body;
+export async function POST(request: Request) {
   try {
+    // リクエストボディから必要なデータを取得
+    const { postId, roomId, yearMonth, dailyReportType, sections } =
+      await request.json();
+
     // 16文字のランダムなIDを生成
     const entryPostId = postId || nanoid(16);
 
@@ -45,7 +42,7 @@ export default async function handler(
             content: section.content,
             roomId: roomId,
             yearMonth: yearMonth,
-            diaryType: diaryType,
+            dailyReportType: dailyReportType,
           },
         })
       );
@@ -53,9 +50,9 @@ export default async function handler(
       await Promise.all(postSectionPromises);
     });
 
-    res.status(200).json(null);
+    return new Response(null, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }

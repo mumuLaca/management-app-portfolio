@@ -1,33 +1,26 @@
 import prisma from "@/lib/prismadb";
-import { Reimbursement } from "@prisma/client";
-import type { NextApiRequest, NextApiResponse } from "next";
 import dayjs from "dayjs";
-import { Prisma } from "@prisma/client";
 
 /**
  * @description
  * 課題登録API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Reimbursement[] | Prisma.BatchPayload | null>
-) {
-  // パラメーター取得
-  const {
-    roomId,
-    issueNo,
-    date,
-    category,
-    content,
-    status,
-    startDate,
-    completeDate,
-  } = req.body;
-
+export async function POST(request: Request) {
   try {
+    // パラメーター取得
+    const {
+      roomId,
+      issueNo,
+      date,
+      category,
+      content,
+      status,
+      startDate,
+      completeDate,
+    } = await request.json();
+
     // 課題登録
     // 既存の課題がある場合は更新、ない場合は新規作成
     await prisma.issue.upsert({
@@ -57,11 +50,11 @@ export default async function handler(
       },
     });
 
-    res.status(200).json(null);
+    return new Response(null, { status: 200 });
   } catch (err) {
     // エラーの場合ログを出力
     console.error(err);
 
-    res.status(400).json(null);
+    return new Response(null, { status: 400 });
   }
 }

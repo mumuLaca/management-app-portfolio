@@ -117,7 +117,7 @@ export default function ModalEntry({
     // パラメーターセット
     const data = {
       employeeId: employee.id,
-      tno: entryData?.entryFlg === EntryFlg.update ? entryData.tno : null,
+      tno: entryData?.entryFlg === EntryFlg.update ? entryData?.tno : null,
       targetDate: targetDates.map((value) => dayjs(value).format("YYYY-MM-DD")),
       contents: contents,
       paidTo: paidTo,

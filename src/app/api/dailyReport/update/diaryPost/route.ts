@@ -1,8 +1,6 @@
-import { ApprovalStatusDiary } from "@/lib/constants";
 import prisma from "@/lib/prismadb";
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
-import { NextApiRequest, NextApiResponse } from "next";
 
 interface Section {
   title: string;
@@ -14,23 +12,20 @@ interface Section {
  * @description
  * 日報‗登録API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // リクエストボディから必要なデータを取得
-  const { sections, postId, roomId, date, status } = req.body;
+export async function POST(request: Request) {
   try {
+    // リクエストボディから必要なデータを取得
+    const { sections, postId, roomId, date, status } = await request.json();
+
     // 16文字のランダムなIDを生成
     const newPostId = nanoid(16);
 
     await prisma.$transaction(async (prisma) => {
       // 日報の登録または更新処理
       // postIdが存在する場合は更新、存在しない場合は新規作成
-      await prisma.diaryPost.upsert({
+      await prisma.dailyReportPost.upsert({
         where: {
           postId: postId ?? "",
           date: {
@@ -109,9 +104,9 @@ export default async function handler(
       await Promise.all(postSectionPromises);
     });
 
-    res.status(200).json(null);
+    return new Response(null, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }

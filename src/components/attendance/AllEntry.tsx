@@ -183,11 +183,18 @@ export default function AllEntry({
                         value={workStyle}
                         onChange={(e) => setWorkStyle(e.target.value)}
                       >
-                        {Object.values(WorkStyle).map((obj) => (
-                          <option key={obj.code} value={obj.code}>
-                            {obj.mean}
-                          </option>
-                        ))}
+                        {Object.values(WorkStyle).map((obj) => {
+                          const workStyleObj =
+                            obj as import("@/types/types").TypeWorkStyle[keyof import("@/types/types").TypeWorkStyle];
+                          return (
+                            <option
+                              key={workStyleObj.code}
+                              value={workStyleObj.code}
+                            >
+                              {workStyleObj.mean}
+                            </option>
+                          );
+                        })}
                       </Form.Select>
                     </Form.Group>
                   </Col>

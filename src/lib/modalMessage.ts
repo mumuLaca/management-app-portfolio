@@ -1,5 +1,7 @@
 // btn2はキャンセルボタンとして定義
 // ボタンは2つとしているが拡張は今後次第(これ以上の拡張は特別にモーダル作らせた方が良い気もする)
+import type { ModalMessageList, ModalMessageKindColor } from "@/types/types";
+
 export const MODALMESSAGE: ModalMessageList = {
   MM00001: {
     kind: "P",

@@ -3,6 +3,23 @@
  * 定数クラス
  */
 import { Employee } from "@prisma/client";
+import type {
+  TypeCodeCRUD,
+  TypeAbsentData,
+  TypeAdminRights,
+  TypeWorkStyle,
+  TypeApprovalStatusDR,
+  TypeApprovalStatusStl,
+  TypeApprovalStatusReim,
+  TypeApprovalStatusDailyReport,
+  TypeSettlementForm,
+  TypeTravelMethod,
+  TypeEntryFlg,
+  TypeReportPattern,
+  TypeDailyReportType,
+  TypeDailyReportAuthority,
+  TypeIssueStatus,
+} from "@/types/types";
 
 export const CodeCRUD: TypeCodeCRUD = {
   create: { code: "1", caption: "登録" },
@@ -208,6 +225,7 @@ export const InitEmployeeInfo: Employee = {
   startTime: "09:00",
   endTime: "18:00",
   basicWorkStyle: WorkStyle.none.code,
+  dailyReportAuthority: "0",
   createdAt: new Date(),
   updatedAt: new Date(),
 };

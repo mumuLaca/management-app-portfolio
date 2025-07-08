@@ -89,12 +89,14 @@ export default function ModalCSVDownload({
                   className="w-50"
                 >
                   <option value={""}>全て</option>
-                  {Object.values(
-                    filterReport === ReportPattern.attendance.code
-                      ? ApprovalStatusAttendance
-                      : filterReport === ReportPattern.settlement.code
-                      ? ApprovalStatusSettlement
-                      : ApprovalStatusReimbursement
+                  {(
+                    Object.values(
+                      filterReport === ReportPattern.attendance.code
+                        ? ApprovalStatusAttendance
+                        : filterReport === ReportPattern.settlement.code
+                        ? ApprovalStatusSettlement
+                        : ApprovalStatusReimbursement
+                    ) as any[]
                   ).map((obj) => (
                     <option key={obj.code} value={obj.code}>
                       {obj.caption}

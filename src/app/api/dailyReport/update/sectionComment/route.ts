@@ -1,32 +1,27 @@
 import { CodeCRUD } from "@/lib/constants";
 import prisma from "@/lib/prismadb";
 import dayjs from "dayjs";
-import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @description
  * セクションコメント登録・更新・削除API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const {
-    postId,
-    indexNo,
-    employeeId,
-    employeeName,
-    commentNo,
-    content,
-    date,
-    crud,
-  } = req.body;
-  let result;
-
+export async function POST(request: Request) {
   try {
+    const {
+      postId,
+      indexNo,
+      employeeId,
+      employeeName,
+      commentNo,
+      content,
+      date,
+      crud,
+    } = await request.json();
+    let result;
+
     // CRUDの値に応じて処理を分岐
     switch (crud) {
       // 登録
@@ -88,9 +83,9 @@ export default async function handler(
         break;
     }
 
-    res.status(200).json(result);
+    return Response.json(result, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }

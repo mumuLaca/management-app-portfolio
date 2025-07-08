@@ -1,4 +1,4 @@
-import { Employee, RoomMember } from "@prisma/client";
+import { Employee } from "@prisma/client";
 import axios from "axios";
 import "flatpickr/dist/flatpickr.min.css";
 import { JSX, useEffect, useRef, useState } from "react";
@@ -26,6 +26,7 @@ export default function ModalMessageForm({
 }: Props) {
   const [title, setTitle] = useState<string>(""); // タイトル
   const [content, setContent] = useState<string>(""); // 内容
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [msg, setMsg] = useState<JSX.Element>(<></>);
 
   const employeeInfoRef = useRef<Employee[]>([]); // 最新の employeeInfo を保持
@@ -117,11 +118,11 @@ export default function ModalMessageForm({
   };
 
   /** 候補リスト選択時処理 */
-  const handleSuggestionClick = (user: any) => {
-    setSelectAddressList((prevList: any) => {
+  const handleSuggestionClick = (user: Employee) => {
+    setSelectAddressList((prevList: Employee[]) => {
       if (
         user.id !== (session?.employee.id ?? 0) &&
-        prevList.every((obj: any) => obj.id !== user.id)
+        prevList.every((obj: Employee) => obj.id !== user.id)
       ) {
         return [...prevList, user];
       }
@@ -132,9 +133,9 @@ export default function ModalMessageForm({
   };
 
   /** 候補リスト削除時処理 */
-  const suggestionsDelete = (mention: any) => () => {
-    setSelectAddressList((prevList: any) =>
-      prevList.filter((obj: any) => obj.id !== mention.id)
+  const suggestionsDelete = (mention: Employee) => () => {
+    setSelectAddressList((prevList: Employee[]) =>
+      prevList.filter((obj: Employee) => obj.id !== mention.id)
     );
   };
 
@@ -220,7 +221,12 @@ export default function ModalMessageForm({
                   value={addressText}
                   onFocus={() => setShowAddressListFlg(true)}
                   onChange={(e) => handleChange(e)}
-                  onCompositionEnd={(e) => handleChange(e as any)}
+                  onCompositionEnd={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    handleChange({
+                      target,
+                    } as React.ChangeEvent<HTMLInputElement>);
+                  }}
                   placeholder="宛先を入力し選択"
                   className={styles.mentionInput}
                 />
@@ -251,7 +257,7 @@ export default function ModalMessageForm({
 
                   return (
                     <div key={rowIndex} className={styles.menttionRow}>
-                      {group.map((mention: any, index: number) => (
+                      {group.map((mention: Employee, index: number) => (
                         <div key={index} className={styles.mentionMember}>
                           <span className="me-1">{mention.name}</span>
                           <FaTimesCircle

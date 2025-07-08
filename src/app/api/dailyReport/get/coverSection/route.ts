@@ -1,19 +1,17 @@
 import prisma from "@/lib/prismadb";
-import { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * @description
  * ルーム情報取得API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(request: Request) {
   // リクエストからのクエリパラメータを取得
-  const { roomId, diaryType, yearMonth } = req.query;
+  const { searchParams } = new URL(request.url);
+  const roomId = searchParams.get("roomId");
+  const dailyReportType = searchParams.get("dailyReportType");
+  const yearMonth = searchParams.get("yearMonth");
 
   let result = null;
 
@@ -22,7 +20,7 @@ export default async function handler(
     const coverSection = await prisma.coverSection.findMany({
       where: {
         roomId: roomId as string,
-        diaryType: diaryType as string,
+        dailyReportType: dailyReportType as string,
         yearMonth: yearMonth as string,
       },
       include: {
@@ -46,7 +44,7 @@ export default async function handler(
         postId: coverSection[0].postId,
         roomId: coverSection[0].roomId,
         yearMonth: coverSection[0].yearMonth,
-        diaryType: coverSection[0].diaryType,
+        dailyReportType: coverSection[0].dailyReportType,
         section: coverSection.map((section) => {
           return {
             indexNo: section.indexNo,
@@ -58,9 +56,9 @@ export default async function handler(
       };
     }
 
-    res.status(200).json(result);
+    return Response.json(result, { status: 200 });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "サーバーエラー" });
+    return Response.json({ message: "サーバーエラー" }, { status: 500 });
   }
 }

@@ -20,7 +20,7 @@ import { LuClipboardCopy } from "react-icons/lu";
 import { LuClipboardPaste } from "react-icons/lu";
 import { Issue } from "@prisma/client";
 import dayjs from "dayjs";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 
 type Props = {
   index: number;
@@ -28,7 +28,7 @@ type Props = {
   urlParams: DailyReportCommonUrlParams;
   date: Date;
   authority: string;
-  approvalStatus: String;
+  approvalStatus: string;
   section: Section;
   issues?: Issue[];
   sections: Section[];
@@ -66,8 +66,7 @@ export default function Tweet({
   const SECTION_LENGTH_DEFAULT = 5; // セクションの長さ
   const SECTION_LENGTH_QUARTER = 4; // セクションの長さ
 
-  const { roomId, dailyReportType, fromDate, toDate } =
-    urlParams as DailyReportCommonUrlParams;
+  const { roomId, dailyReportType } = urlParams as DailyReportCommonUrlParams;
 
   useEffect(() => {
     handletweetContentInput();

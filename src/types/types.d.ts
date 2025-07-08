@@ -1,6 +1,6 @@
 /** ----- CRUD ----- */
-type CodeCRUDKeys = "create" | "read" | "update" | "delete";
-type TypeCodeCRUD = {
+export type CodeCRUDKeys = "create" | "read" | "update" | "delete";
+export type TypeCodeCRUD = {
   [key in CodeCRUDKeys]: {
     code: string;
     caption: string;
@@ -8,7 +8,7 @@ type TypeCodeCRUD = {
 };
 
 /** ----- 業務形態 ----- */
-type AbsentDataKeys =
+export type AbsentDataKeys =
   | "none"
   | "allDayOff"
   | "halfDayOff"
@@ -18,7 +18,7 @@ type AbsentDataKeys =
   | "specialHoliday"
   | "companyEvent";
 
-type TypeAbsentData = {
+export type TypeAbsentData = {
   [key in AbsentDataKeys]: {
     code: string;
     caption: string;
@@ -27,16 +27,16 @@ type TypeAbsentData = {
 };
 
 /** ----- 管理者権限 ----- */
-type AdminRightsKeys = "general" | "admin" | "leader";
+export type AdminRightsKeys = "general" | "admin" | "leader";
 
-type TypeAdminRights = {
+export type TypeAdminRights = {
   [key in AdminRightsKeys]: { code: string; caption: string };
 };
 
 /** ----- 業務形態 ----- */
-type WorkStyleKeys = "none" | "office" | "telework";
+export type WorkStyleKeys = "none" | "office" | "telework";
 
-type TypeWorkStyle = {
+export type TypeWorkStyle = {
   [key in WorkStyleKeys]: {
     code: string;
     mean: string;
@@ -44,7 +44,7 @@ type TypeWorkStyle = {
 };
 
 /** ----- 承認状況_勤務表 ----- */
-type ApprovalStatusDRKeys =
+export type ApprovalStatusDRKeys =
   | "unapproved"
   | "input"
   | "approvalPending"
@@ -52,7 +52,7 @@ type ApprovalStatusDRKeys =
   | "reApprovalPending"
   | "approved";
 
-type TypeApprovalStatusDR = {
+export type TypeApprovalStatusDR = {
   [key in ApprovalStatusDRKeys]: {
     code: string;
     caption: string;
@@ -60,7 +60,7 @@ type TypeApprovalStatusDR = {
 };
 
 /** ----- 承認状況_交通費精算表 ----- */
-type ApprovalStatusStlKeys =
+export type ApprovalStatusStlKeys =
   | "noInput"
   | "input"
   | "approvalPending"
@@ -68,7 +68,7 @@ type ApprovalStatusStlKeys =
   | "reApprovalPending"
   | "approved";
 
-type TypeApprovalStatusStl = {
+export type TypeApprovalStatusStl = {
   [key in ApprovalStatusStlKeys]: {
     code: string;
     caption: string;
@@ -76,7 +76,7 @@ type TypeApprovalStatusStl = {
 };
 
 /** ----- 承認状況_立替精算表 ----- */
-type ApprovalStatusReimKeys =
+export type ApprovalStatusReimKeys =
   | "noInput"
   | "input"
   | "approvalPending"
@@ -84,7 +84,7 @@ type ApprovalStatusReimKeys =
   | "reApprovalPending"
   | "approved";
 
-type TypeApprovalStatusReim = {
+export type TypeApprovalStatusReim = {
   [key in ApprovalStatusReimKeys]: {
     code: string;
     caption: string;
@@ -92,7 +92,7 @@ type TypeApprovalStatusReim = {
 };
 
 /** ----- 承認状況_日報 ----- */
-type ApprovalStatusDailyReportKeys =
+export type ApprovalStatusDailyReportKeys =
   | "noInput"
   | "saveTemporary"
   | "submitted"
@@ -101,7 +101,7 @@ type ApprovalStatusDailyReportKeys =
   | "firstPending"
   | "secondPending";
 
-type TypeApprovalStatusDailyReport = {
+export type TypeApprovalStatusDailyReport = {
   [key in ApprovalStatusDailyReportKeys]: {
     code: string;
     caption: string;
@@ -110,9 +110,9 @@ type TypeApprovalStatusDailyReport = {
 };
 
 /** ----- 精算形態 ----- */
-type SettlementFormKeys = "commuter" | "trip";
+export type SettlementFormKeys = "commuter" | "trip";
 
-type TypeSettlementForm = {
+export type TypeSettlementForm = {
   [key in SettlementFormKeys]: {
     code: string;
     method: string;
@@ -120,9 +120,9 @@ type TypeSettlementForm = {
 };
 
 /** ----- 移動/宿泊 ----- */
-type TravelMethodKeys = "none" | "oneWay" | "roundTrip" | "stay";
+export type TravelMethodKeys = "none" | "oneWay" | "roundTrip" | "stay";
 
-type TypeTravelMethod = {
+export type TypeTravelMethod = {
   [key in TravelMethodKeys]: {
     code: string;
     method: string;
@@ -130,9 +130,9 @@ type TypeTravelMethod = {
 };
 
 /** ----- 表パターン ----- */
-type ReportPatternKeys = "attendance" | "settlement" | "reimbursement";
+export type ReportPatternKeys = "attendance" | "settlement" | "reimbursement";
 
-type TypeReportPattern = {
+export type TypeReportPattern = {
   [key in ReportPatternKeys]: {
     code: string;
     name: string;
@@ -141,9 +141,9 @@ type TypeReportPattern = {
 };
 
 /** ----- 日報タイプ ----- */
-type DailyReportTypeKeys = "daily" | "weekly" | "monthly" | "quarter";
+export type DailyReportTypeKeys = "daily" | "weekly" | "monthly" | "quarter";
 
-type TypeDailyReportType = {
+export type TypeDailyReportType = {
   [key in DailyReportTypeKeys]: {
     code: string;
     name: string;
@@ -151,9 +151,9 @@ type TypeDailyReportType = {
 };
 
 /** ----- 日報権限 ----- */
-type DailyReportAuthorityKeys = "mySelf" | "trainer" | "officeStaff";
+export type DailyReportAuthorityKeys = "mySelf" | "trainer" | "officeStaff";
 
-type TypeDailyReportAuthority = {
+export type TypeDailyReportAuthority = {
   [key in DailyReportAuthorityKeys]: {
     code: string;
     caption: string;
@@ -161,9 +161,9 @@ type TypeDailyReportAuthority = {
 };
 
 /** ----- 日報権限 ----- */
-type IssueStatusKeys = "inComplete" | "onGoing" | "complete" | "cancel";
+export type IssueStatusKeys = "inComplete" | "onGoing" | "complete" | "cancel";
 
-type TypeIssueStatus = {
+export type TypeIssueStatus = {
   [key in IssueStatusKeys]: {
     code: string;
     caption: string;
@@ -171,14 +171,14 @@ type TypeIssueStatus = {
 };
 
 /** ----- 変更フラグ ----- */
-type TypeEntryFlg = {
+export type TypeEntryFlg = {
   entry: string;
   update: string;
   delete: string;
 };
 
 /** ----- 勤務表‗集計項目 ----- */
-interface TotalingItems {
+export interface TotalingItems {
   active: number;
   overTime: number;
   lNOverTime: number;
@@ -189,7 +189,7 @@ interface TotalingItems {
 }
 
 /** メッセージリスト */
-interface MessageList {
+export interface MessageList {
   [key: string]: {
     kind: string;
     message: string;
@@ -197,13 +197,13 @@ interface MessageList {
 }
 
 /** メッセージ */
-interface Message {
+export interface Message {
   kind: string;
   message: string;
 }
 
 /** モーダル表示用メッセージリスト */
-interface ModalMessageList {
+export interface ModalMessageList {
   [key: string]: {
     kind: string;
     title: string;
@@ -221,7 +221,7 @@ interface ModalMessageList {
 }
 
 /** モーダル表示用メッセージ */
-interface ModalMessage {
+export interface ModalMessage {
   kind: string;
   title: string;
   message: string;
@@ -237,10 +237,18 @@ interface ModalMessage {
 }
 
 /** モーダルメッセージレイアウト */
-interface ModalMessageKindColor {
+export interface ModalMessageKindColor {
   [key: string]: {
     icon: string;
     backgroundColor: string;
     btnColor: string;
   };
+}
+
+/** 日報共通URLパラメータ */
+export interface DailyReportCommonUrlParams {
+  roomId: string;
+  dailyReportType: string;
+  fromDate: string;
+  toDate: string;
 }

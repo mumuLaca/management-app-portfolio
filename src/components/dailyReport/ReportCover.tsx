@@ -1,7 +1,7 @@
 import { DailyReportType } from "@/lib/constants";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import { DailyReportCommonUrlParams } from "@/app/dailyReport/[...slug]";
 import { SectionComment } from "@prisma/client";
-import { Dispatch, useEffect, useRef, useState } from "react";
+import { Dispatch, useEffect, useRef, useState, JSX } from "react";
 import styles from "@/styles/DailyReport.module.css";
 import dayjs from "dayjs";
 import { Alert, Button } from "react-bootstrap";
@@ -11,7 +11,6 @@ import Comment from "./Comment";
 import Reply from "./Reply";
 import { Session } from "next-auth";
 import axios from "axios";
-import { url } from "inspector";
 import { BsCalendar2WeekFill } from "react-icons/bs";
 
 interface ReportCover {

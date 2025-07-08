@@ -1,19 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prismadb";
-import { DiaryAuthority } from "@/lib/constants";
+import { DailyReportAuthority } from "@/lib/constants";
 
 /**
  * @description
  * 担当用のルーム情報を取得するAPI
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { employeeId } = req.query;
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const employeeId = searchParams.get("employeeId");
 
   try {
     // 育成担当、本社担当
@@ -21,8 +17,8 @@ export default async function handler(
       where: {
         employeeId: Number(employeeId),
         OR: [
-          { authority: DiaryAuthority.trainer.code },
-          { authority: DiaryAuthority.officeStaff.code },
+          { authority: DailyReportAuthority.trainer.code },
+          { authority: DailyReportAuthority.officeStaff.code },
         ],
       },
       select: {
@@ -50,9 +46,9 @@ export default async function handler(
       },
     });
 
-    return res.status(200).json(result);
+    return Response.json(result, { status: 200 });
   } catch (error) {
     console.error("Error fetching post:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return Response.json({ message: "Internal server error" }, { status: 500 });
   }
 }

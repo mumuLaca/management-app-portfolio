@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import { DailyReportPost } from "@prisma/client";
 import { ApprovalStatusDailyReport, DailyReportType } from "@/lib/constants";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 
 type Props = {
   urlParams: DailyReportCommonUrlParams;
@@ -95,10 +95,12 @@ export default function Calendar({
         return;
       // 週報
       case DailyReportType.weekly.code:
-        let prevStartDatOfMonth = dayjs(date)
+        const prevStartDatOfMonth = dayjs(date)
           .subtract(1, "month")
           .startOf("month");
-        let startDayOfWeek = prevStartDatOfMonth.startOf("week").add(1, "day");
+        const startDayOfWeek = prevStartDatOfMonth
+          .startOf("week")
+          .add(1, "day");
         if (prevStartDatOfMonth.month() === startDayOfWeek.month()) {
           setDate(startDayOfWeek.toDate());
         } else {
@@ -157,8 +159,12 @@ export default function Calendar({
         return;
       // 週報
       case DailyReportType.weekly.code:
-        let nextStartDatOfMonth = dayjs(date).add(1, "month").startOf("month");
-        let startDayOfWeek = nextStartDatOfMonth.startOf("week").add(1, "day");
+        const nextStartDatOfMonth = dayjs(date)
+          .add(1, "month")
+          .startOf("month");
+        const startDayOfWeek = nextStartDatOfMonth
+          .startOf("week")
+          .add(1, "day");
         if (nextStartDatOfMonth.month() === startDayOfWeek.month()) {
           setDate(startDayOfWeek.toDate());
         } else {
@@ -244,7 +250,7 @@ export default function Calendar({
         }
         // 日付を追加
         for (let i = 1; i <= daysInMonth; i++) {
-          let statusColor = setStatusColor(dayjs(date).date(i).toDate());
+          const statusColor = setStatusColor(dayjs(date).date(i).toDate());
 
           days.push(
             <button
@@ -268,7 +274,7 @@ export default function Calendar({
         const calendarStart = startOfMonth.startOf("week"); // ← Sunday 基準
         const calendarEnd = endOfMonth.endOf("week"); // ← Saturday 基準
         const diffDays = calendarEnd.diff(calendarStart, "day") + 1; // +1 は開始日を含めるため
-        let totalWeeks = Math.ceil(diffDays / 7); // 週数を計算
+        const totalWeeks = Math.ceil(diffDays / 7); // 週数を計算
         let week = 0;
         if (calendarStart.add(1, "day").month() === dayjs(date).month()) {
           week = 0;
@@ -303,7 +309,7 @@ export default function Calendar({
             continue;
           }
 
-          let statusColor = setStatusColor(targetFromDate.toDate());
+          const statusColor = setStatusColor(targetFromDate.toDate());
 
           days.push(
             <button
@@ -336,7 +342,7 @@ export default function Calendar({
 
           const monthDate = dayjs(new Date(year, monthIndex, 1));
 
-          let statusColor = setStatusColor(monthDate.toDate());
+          const statusColor = setStatusColor(monthDate.toDate());
 
           days.push(
             <button
@@ -386,7 +392,7 @@ export default function Calendar({
           const year = i * 3 <= 9 ? dQDate.year() : dQDate.year() + 1;
           const quarterDate = dayjs(new Date(year, monthIndex, 1));
 
-          let statusColor = setStatusColor(quarterDate.toDate());
+          const statusColor = setStatusColor(quarterDate.toDate());
 
           days.push(
             <button
@@ -506,10 +512,10 @@ export default function Calendar({
   // モーダルとして表示している場合、モーダルを閉じる
   const closeModal = () => {
     setTimeout(() => {
-      !!modalTweetInfoOpenFlg &&
-        setModalTweetInfoOpenFlg &&
+      if (modalTweetInfoOpenFlg && setModalTweetInfoOpenFlg) {
         setModalTweetInfoOpenFlg(false);
-    }, 400); // 1秒待機
+      }
+    }, 400);
   };
 
   return (

@@ -10,7 +10,6 @@ import { getIssueStatusKey } from "@/utils/constantsUtil";
 type Props = {
   switchTabFlg: boolean;
   issues?: Issue[];
-  setMsg: React.Dispatch<React.SetStateAction<JSX.Element>>;
   setIssueModalOpenFlg: React.Dispatch<React.SetStateAction<boolean>>;
   setTargetIssue: React.Dispatch<React.SetStateAction<Issue | undefined>>;
   setIssueCRUDFlg: React.Dispatch<React.SetStateAction<string>>;

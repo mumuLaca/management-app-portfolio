@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import { CodeCRUD } from "@/lib/constants";
 import { GiCancel } from "react-icons/gi";
 import { Session } from "next-auth";
+import { SectionComment } from "@prisma/client";
 
 type Props = {
   session: Session;
@@ -60,7 +61,7 @@ function ReplyComment({
   handleCommentSubmit,
 }: {
   viewerId: number;
-  sectionComment: any;
+  sectionComment: SectionComment;
   handleCommentSubmit: (
     comment: string,
     crud: string,

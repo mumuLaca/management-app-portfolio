@@ -261,20 +261,22 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
                       </div>
                     </Accordion.Header>
                     <Accordion.Body className={styles.accordionBody}>
-                      {Object.values(ReportPattern).map((rep, index) => (
-                        <div key={index} className={styles.accordionDiv}>
-                          <span className={styles.cardStatusTextTitle}>
-                            {rep.name}
-                          </span>
-                          <span
-                            className={`${
-                              styles.cardStatusTextValue
-                            } ${setColorOfStatus(obj.yearMonth, rep.code)}`}
-                          >
-                            {setStatusOfReport(obj.yearMonth, rep.code)}
-                          </span>
-                        </div>
-                      ))}
+                      {(Object.values(ReportPattern) as any[]).map(
+                        (rep, index) => (
+                          <div key={index} className={styles.accordionDiv}>
+                            <span className={styles.cardStatusTextTitle}>
+                              {rep.name}
+                            </span>
+                            <span
+                              className={`${
+                                styles.cardStatusTextValue
+                              } ${setColorOfStatus(obj.yearMonth, rep.code)}`}
+                            >
+                              {setStatusOfReport(obj.yearMonth, rep.code)}
+                            </span>
+                          </div>
+                        )
+                      )}
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>

@@ -1,27 +1,18 @@
 import prisma from "@/lib/prismadb";
-import { Employee, Reimbursement } from "@prisma/client";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { Employee } from "@prisma/client";
 import dayjs from "dayjs";
-import { Prisma } from "@prisma/client";
-import { DiaryAuthority } from "@/lib/constants";
+import { DailyReportAuthority } from "@/lib/constants";
 import { nanoid } from "nanoid";
 
 /**
  * @description
  * 日報ルーム作成API
  *
- * @param req request data
- * @param res response data
+ * @param request Request data
  */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Reimbursement[] | Prisma.BatchPayload | null>
-) {
-  let result = null;
-
-  // パラメーター取得
-  const request = req.body;
+export async function POST(request: Request) {
   try {
+    const reqBody = await request.json();
     // 16文字のランダムなIDを生成
     const roomId = nanoid(16);
 
@@ -29,36 +20,36 @@ export default async function handler(
     // 自分、育成担当、本社担当の情報を追加
     const mergedRoomMember = [
       {
-        id: request.employeeId,
-        name: request.employeeName,
-        authority: DiaryAuthority.mySelf.code,
+        id: reqBody.employeeId,
+        name: reqBody.employeeName,
+        authority: DailyReportAuthority.mySelf.code,
       },
-      ...request.trainerList.map((obj: Employee) => ({
+      ...reqBody.trainerList.map((obj: Employee) => ({
         id: obj.id,
         name: obj.name,
-        authority: DiaryAuthority.trainer.code,
+        authority: DailyReportAuthority.trainer.code,
       })),
-      ...request.officeStaffList.map((obj: Employee) => ({
+      ...reqBody.officeStaffList.map((obj: Employee) => ({
         id: obj.id,
         name: obj.name,
-        authority: DiaryAuthority.officeStaff.code,
+        authority: DailyReportAuthority.officeStaff.code,
       })),
     ];
 
-    result = await prisma.$transaction(async (prisma) => {
+    await prisma.$transaction(async (prisma) => {
       // ルーム情報を作成
       await prisma.roomInfo.create({
         data: {
-          employeeId: request.employeeId,
+          employeeId: reqBody.employeeId,
           roomId: roomId,
-          diaryType: request.diaryType,
+          dailyReportType: reqBody.dailyReportType,
           fromDate: dayjs
-            .utc(request.fromDate)
+            .utc(reqBody.fromDate)
             .startOf("month")
             .startOf("day")
             .toDate(),
           toDate: dayjs
-            .utc(request.toDate)
+            .utc(reqBody.toDate)
             .endOf("month")
             .startOf("day")
             .toDate(),
@@ -77,24 +68,22 @@ export default async function handler(
         });
 
         // 社員情報の日報権限を更新
-        if (member.authority !== DiaryAuthority.mySelf.code) {
+        if (member.authority !== DailyReportAuthority.mySelf.code) {
           await prisma.employee.update({
             where: {
               id: member.id,
             },
             data: {
-              diaryAuthority: member.authority,
+              dailyReportAuthority: member.authority,
             },
           });
         }
       }
     });
 
-    res.status(200).json(null);
+    return new Response(null, { status: 200 });
   } catch (err) {
-    // エラーの場合ログを出力
     console.error(err);
-
-    res.status(400).json(null);
+    return new Response(null, { status: 400 });
   }
 }

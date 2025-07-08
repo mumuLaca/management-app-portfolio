@@ -9,7 +9,25 @@ import {
   SettlementForm,
   ApprovalStatusReimbursement,
   CodeCRUD,
+  DailyReportType,
+  DailyReportAuthority,
+  IssueStatus,
 } from "@/lib/constants";
+import type {
+  CodeCRUDKeys,
+  AdminRightsKeys,
+  WorkStyleKeys,
+  AbsentDataKeys,
+  ApprovalStatusDRKeys,
+  ApprovalStatusStlKeys,
+  ApprovalStatusReimKeys,
+  SettlementFormKeys,
+  TravelMethodKeys,
+  ReportPatternKeys,
+  DailyReportTypeKeys,
+  DailyReportAuthorityKeys,
+  IssueStatusKeys,
+} from "@/types/types";
 
 /** CRUDのcodeに対応するkeyを返却 */
 export const getCodeCRUDKey = (codeFind: string): CodeCRUDKeys => {
@@ -115,4 +133,38 @@ export const getReportPatternKey = (codeFind: string): ReportPatternKeys => {
   return entry
     ? (entry[0] as ReportPatternKeys)
     : (Object.keys(ReportPattern)[0] as ReportPatternKeys);
+};
+
+/** 日報タイプのcodeに対応するkeyを返却 */
+export const getDailyReportTypeKey = (
+  codeFind: string
+): DailyReportTypeKeys => {
+  const entry = Object.entries(DailyReportType).find(
+    ([, value]) => value.code === codeFind
+  );
+  return entry
+    ? (entry[0] as DailyReportTypeKeys)
+    : (Object.keys(DailyReportType)[0] as DailyReportTypeKeys);
+};
+
+/** 日報権限のcodeに対応するkeyを返却 */
+export const getDailyReportAuthorityKey = (
+  codeFind: string
+): DailyReportAuthorityKeys => {
+  const entry = Object.entries(DailyReportAuthority).find(
+    ([, value]) => value.code === codeFind
+  );
+  return entry
+    ? (entry[0] as DailyReportAuthorityKeys)
+    : (Object.keys(DailyReportAuthority)[0] as DailyReportAuthorityKeys);
+};
+
+/** 課題進行状況のcodeに対応するkeyを返却 */
+export const getIssueStatusKey = (codeFind: string): IssueStatusKeys => {
+  const entry = Object.entries(IssueStatus).find(
+    ([, value]) => value.code === codeFind
+  );
+  return entry
+    ? (entry[0] as IssueStatusKeys)
+    : (Object.keys(IssueStatus)[0] as IssueStatusKeys);
 };

@@ -357,11 +357,15 @@ export default function ModalAllModify({
                   onChange={(e) => setWorkStyle(e.target.value)}
                   disabled={!workStyleModify}
                 >
-                  {Object.values(WorkStyle).map((obj) => (
-                    <option key={obj.code} value={obj.code}>
-                      {obj.mean}
-                    </option>
-                  ))}
+                  {Object.values(WorkStyle).map((obj) => {
+                    const workStyleObj =
+                      obj as import("@/types/types").TypeWorkStyle[keyof import("@/types/types").TypeWorkStyle];
+                    return (
+                      <option key={workStyleObj.code} value={workStyleObj.code}>
+                        {workStyleObj.mean}
+                      </option>
+                    );
+                  })}
                 </Form.Select>
               </Form.Group>
               <Form.Group className="mb-3" as={Col}>
@@ -380,11 +384,15 @@ export default function ModalAllModify({
                   onChange={(e) => handleChangeaAbsent(e)}
                   disabled={!absentCodeModify}
                 >
-                  {Object.values(AbsentData).map((ab) => (
-                    <option key={ab.code} value={ab.code}>
-                      {ab.caption}
-                    </option>
-                  ))}
+                  {Object.values(AbsentData).map((ab) => {
+                    const absentObj =
+                      ab as import("@/types/types").TypeAbsentData[keyof import("@/types/types").TypeAbsentData];
+                    return (
+                      <option key={absentObj.code} value={absentObj.code}>
+                        {absentObj.caption}
+                      </option>
+                    );
+                  })}
                 </Form.Select>
               </Form.Group>
             </Row>

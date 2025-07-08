@@ -1,7 +1,7 @@
 import { RoomMember } from "@prisma/client";
 import "flatpickr/dist/flatpickr.min.css";
 import { Dispatch } from "react";
-import { DailyReportCommonUrlParams } from "@/pages/dailyReport/[...slug]";
+import type { DailyReportCommonUrlParams } from "@/types/types";
 import dynamic from "next/dynamic";
 import { useWindowSize } from "@/lib/useWindowSize";
 
