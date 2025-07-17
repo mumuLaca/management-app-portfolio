@@ -11,8 +11,6 @@ import dayjs from "@/lib/dayjs";
 import "flatpickr/dist/flatpickr.min.css";
 import { Japanese } from "flatpickr/dist/l10n/ja.js";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
 import FlatPickr from "react-flatpickr";
 import TimeList15 from "../common/TimeList15";
 import { getAbsentDataKey } from "@/utils/constantsUtil";
@@ -23,6 +21,24 @@ import { Employee } from "@prisma/client";
 import { MESSAGE } from "@/lib/message";
 import { TbFileReport } from "react-icons/tb";
 import type { WorkStyleKeys } from "@/types/types";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Props = {
   entryModalOpenFlg: boolean;
@@ -77,36 +93,39 @@ export default function ModalEntry({
       }
     };
     getInputCandidate();
-  }, [entryModalOpenFlg, employee.id]);
+
+    // モーダル初期表示処理
+    if (entryModalOpenFlg && entryItem) {
+      // DBに登録済の日付の場合は、登録済のデータをセット
+      setTargetDates([new Date(entryItem.date)]);
+      setStartTime(entryItem.startTime);
+      setEndTime(entryItem.endTime);
+      setRest(entryItem.rest);
+      setWorkStyle(WorkStyle[entryItem.workStyle as WorkStyleKeys].code);
+      setAbsentCode(entryItem.absentCode || "000");
+      setNote(entryItem.note);
+
+      // DBに未登録の日付の場合は、プロフィールで設定した値をセット
+      if (entryItem.empty) {
+        setStartTime(employee.startTime);
+        setEndTime(employee.endTime);
+        setWorkStyle(employee.basicWorkStyle);
+        setRest("1.00");
+      }
+    }
+  }, [
+    entryModalOpenFlg,
+    employee.id,
+    entryItem,
+    employee.startTime,
+    employee.endTime,
+    employee.basicWorkStyle,
+  ]);
 
   // 月初日
   const firstDayOfMonth = dayjs(entryItem?.date).startOf("month").toDate();
   // 月末日
   const lastDayOfMonth = dayjs(entryItem?.date).endOf("month").toDate();
-
-  /** モーダル初期表示処理 */
-  const onShow = () => {
-    if (entryItem === null) {
-      return;
-    }
-
-    // DBに登録済の日付の場合は、登録済のデータをセット
-    setTargetDates([new Date(entryItem.date)]);
-    setStartTime(entryItem.startTime);
-    setEndTime(entryItem.endTime);
-    setRest(entryItem.rest);
-    setWorkStyle(WorkStyle[entryItem.workStyle as WorkStyleKeys].code);
-    setAbsentCode(entryItem.absentCode || "000");
-    setNote(entryItem.note);
-
-    // DBに未登録の日付の場合は、プロフィールで設定した値をセット
-    if (entryItem.empty) {
-      setStartTime(employee.startTime);
-      setEndTime(employee.endTime);
-      setWorkStyle(employee.basicWorkStyle);
-      setRest("1.00");
-    }
-  };
 
   /** 入力値クリアボタン押下時処理 */
   const inputClear = () => {
@@ -164,8 +183,8 @@ export default function ModalEntry({
   };
 
   /** 区分変更時処理 */
-  const handleChangeAbsent = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setAbsentCode(e.target.value);
+  const handleChangeAbsent = (value: string) => {
+    setAbsentCode(value);
 
     // 不就業区分が「終日」であれば時刻と休憩時間をクリアする
     if (
@@ -173,7 +192,7 @@ export default function ModalEntry({
         const absentObj =
           ab as import("@/types/types").TypeAbsentData[keyof import("@/types/types").TypeAbsentData];
         return (
-          absentObj.code === e.target.value &&
+          absentObj.code === value &&
           (absentObj.allday === true ||
             absentObj.code === AbsentData.companyEvent.code)
         );
@@ -224,42 +243,30 @@ export default function ModalEntry({
 
   return (
     <>
-      <Modal
-        show={entryModalOpenFlg}
-        onShow={onShow}
-        onHide={handleCloseModal}
-        centered
-      >
-        <Modal.Header
-          closeButton
-          closeVariant="white"
-          className="bg-primary"
-          style={{ color: "#fff" }}
-        >
-          <Modal.Title className="d-flex justify-content-between w-100 align-items-center">
-            <div>
-              <TbFileReport />
-              <span className="ms-2">勤務表入力</span>
-            </div>
-            <div className="text-end me-3">
-              <Button variant="success" onClick={handleSettlementModalOpen}>
-                交通費精算登録
-              </Button>
-            </div>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {settlementEntryCompFlg && (
-            <Row>
-              <Alert variant={MESSAGE.SM0001.kind}>
-                {MESSAGE.SM0001.message}
+      <Dialog open={entryModalOpenFlg} onOpenChange={handleCloseModal}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader className="bg-primary" style={{ color: "#fff" }}>
+            <DialogTitle className="flex justify-between w-full items-center">
+              <div>
+                <TbFileReport />
+                <span className="ms-2">勤務表入力</span>
+              </div>
+              <div className="text-end me-3">
+                <Button onClick={handleSettlementModalOpen}>
+                  交通費精算登録
+                </Button>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            {settlementEntryCompFlg && (
+              <Alert>
+                <AlertDescription>{MESSAGE.SM0001.message}</AlertDescription>
               </Alert>
-            </Row>
-          )}
-          <Form>
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>日付</Form.Label>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>日付</Label>
                 <FlatPickr
                   value={targetDates}
                   onChange={(value) => setTargetDates(value)}
@@ -272,19 +279,17 @@ export default function ModalEntry({
                     mode: "multiple",
                   }}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <div className="d-flex align-items-end flex-column">
-                  <Button variant="outline-dark" onClick={inputClear}>
-                    クリア
-                  </Button>
-                </div>
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>開始時刻</Form.Label>
-                <Form.Control
+              </div>
+              <div className="flex items-end justify-end">
+                <Button variant="outline" onClick={inputClear}>
+                  クリア
+                </Button>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>開始時刻</Label>
+                <Input
                   type="time"
                   value={startTime}
                   list="data-list-start-15"
@@ -292,10 +297,10 @@ export default function ModalEntry({
                   step={900}
                   disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>終了時刻</Form.Label>
-                <Form.Control
+              </div>
+              <div className="space-y-2">
+                <Label>終了時刻</Label>
+                <Input
                   type="time"
                   value={endTime}
                   list="data-list-end-15"
@@ -303,10 +308,10 @@ export default function ModalEntry({
                   step={900}
                   disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>休憩(H)</Form.Label>
-                <Form.Control
+              </div>
+              <div className="space-y-2">
+                <Label>休憩(H)</Label>
+                <Input
                   type="number"
                   inputMode="decimal"
                   value={rest}
@@ -315,80 +320,81 @@ export default function ModalEntry({
                   step="0.25"
                   disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>勤務形態</Form.Label>
-                <Form.Select
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>勤務形態</Label>
+                <Select
                   value={workStyle}
-                  onChange={(e) => setWorkStyle(e.target.value)}
+                  onValueChange={(value) => setWorkStyle(value)}
                   disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 >
-                  {Object.values(WorkStyle).map((obj) => (
-                    <option key={obj.code} value={obj.code}>
-                      {obj.mean}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>区分</Form.Label>
-                <Form.Select value={absentCode} onChange={handleChangeAbsent}>
-                  {/* @ts-ignore */}
-                  {absentList
-                    .filter((obj: any) => obj.code !== "700")
-                    .map((ab: any) => (
-                      <option key={ab.code} value={ab.code}>
-                        {ab.caption}
-                      </option>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(WorkStyle).map((obj) => (
+                      <SelectItem key={obj.code} value={obj.code}>
+                        {obj.mean}
+                      </SelectItem>
                     ))}
-                </Form.Select>
-              </Form.Group>
-            </Row>
-
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>備考</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder="休暇等の補足情報"
-                  list="candidateNote"
-                />
-                <datalist id="candidateNote">
-                  {candidateNote.map((item) => (
-                    <option key={item} value={item} />
-                  ))}
-                </datalist>
-              </Form.Group>
-            </Row>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer className="justify-content-between">
-          <div>
-            <Button
-              variant={entryItem?.empty ? "secondary" : "danger"}
-              onClick={handleDelete}
-              disabled={entryItem?.empty ? true : false}
-              size="lg"
-            >
-              削除
-            </Button>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>区分</Label>
+                <Select value={absentCode} onValueChange={handleChangeAbsent}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {absentList
+                      .filter((obj: any) => obj.code !== "700")
+                      .map((ab: any) => (
+                        <SelectItem key={ab.code} value={ab.code}>
+                          {ab.caption}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>備考</Label>
+              <Input
+                type="text"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="休暇等の補足情報"
+                list="candidateNote"
+              />
+              <datalist id="candidateNote">
+                {candidateNote.map((item) => (
+                  <option key={item} value={item} />
+                ))}
+              </datalist>
+            </div>
           </div>
-          <div>
-            <Button
-              variant="primary"
-              onClick={handleSubmit}
-              className="px-5"
-              size="lg"
-            >
-              登録
-            </Button>
-          </div>
-        </Modal.Footer>
-      </Modal>
+          <DialogFooter className="justify-between">
+            <div>
+              <Button
+                variant={entryItem?.empty ? "secondary" : "destructive"}
+                onClick={handleDelete}
+                disabled={entryItem?.empty ? true : false}
+                size="lg"
+              >
+                削除
+              </Button>
+            </div>
+            <div>
+              <Button onClick={handleSubmit} className="px-5" size="lg">
+                登録
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <TimeList15 />
       <SettlementEntryModal
         entryModalOpenFlg={settlementEntryFlg}

@@ -7,7 +7,6 @@ import "flatpickr/dist/flatpickr.min.css";
 import { Japanese } from "flatpickr/dist/l10n/ja.js";
 import { useEffect, useState, JSX } from "react";
 import {
-  Alert,
   Button,
   Col,
   Dropdown,
@@ -16,6 +15,22 @@ import {
   InputGroup,
   Row,
 } from "react-bootstrap";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import Modal from "react-bootstrap/Modal";
 import FlatPickr from "react-flatpickr";
 import { MdOutlinePlaylistAdd } from "react-icons/md";

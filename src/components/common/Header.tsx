@@ -1,6 +1,5 @@
 "use client";
 
-import { Nav, Navbar } from "react-bootstrap";
 import styles from "@/styles/Header.module.css";
 import sideBarStyles from "@/styles/SideBar.module.css";
 import React from "react";
@@ -26,7 +25,9 @@ export default function Header({
   return (
     <>
       <header>
-        <Navbar className={`px-2 ${styles.navBar} `}>
+        <nav
+          className={`px-2 ${styles.navBar} flex items-center justify-between bg-white border-b border-gray-200`}
+        >
           <button
             onClick={() => {
               setSidebarShow(true);
@@ -38,13 +39,13 @@ export default function Header({
               className={`${sideBarStyles.topIcon} ${sideBarStyles.sBRotate}`}
             />
           </button>
-          <Nav className={`fs-5 ${styles.nav}`}>
-            <Nav.Link
+          <div className={`text-lg ${styles.nav} flex items-center space-x-4`}>
+            <button
               className={styles.linkQuestion}
               onClick={() => seetShowHelp(true)}
             >
               <FaRegQuestionCircle className={styles.questionIcon} />
-            </Nav.Link>
+            </button>
             <div className={styles.profile}>
               <Image
                 src={session!.user.image}
@@ -55,8 +56,8 @@ export default function Header({
               />
               <span className={styles.fontColor}>{session!.employee.name}</span>
             </div>
-          </Nav>
-        </Navbar>
+          </div>
+        </nav>
       </header>
       <Help showHelp={showHelp} seetShowHelp={seetShowHelp} />
     </>

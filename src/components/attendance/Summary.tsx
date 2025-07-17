@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
 import styles from "@/styles/Attendance.module.css";
 import { useWindowSize } from "@/lib/useWindowSize";
 import { TypeMonthlyAttendance } from "@/types/attendance";
@@ -106,7 +105,7 @@ export default function Summary({
 
   return (
     <>
-      <Container className="mb-3" fluid={width < 992 ? true : false}>
+      <div className={`mb-3 ${width < 992 ? "w-full" : ""}`}>
         <div className={styles.accordion}>
           <div
             className={`${styles.contentBox} ${isActive ? styles.active : ""}`}
@@ -115,62 +114,76 @@ export default function Summary({
             <BsArrowDownCircleFill className={styles.arrow} />
             <div className={styles.label}>集計</div>
             <div className={styles.content}>
-              <Row className="px-2">
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-7 gap-4 px-2">
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">
                     {width < 1320 ? "実働時間" : "実働時間(H)"}
                   </div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalActiveTime.toFixed(2)}
                   </div>
-                </Col>
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">
+                </div>
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">
                     {width < 1320 ? "残業時間" : "残業時間(H)"}
                   </div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalOverTime.toFixed(2)}
                   </div>
-                </Col>
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">
+                </div>
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">
                     {width < 1320 ? "深夜残業" : "深夜残業時間(H)"}
                   </div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalLNOverTime.toFixed(2)}
                   </div>
-                </Col>
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">
+                </div>
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">
                     {width < 1320 ? "法定休日" : "法定休日勤務(H)"}
                   </div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalLHActiveTime.toFixed(2)}
                   </div>
-                </Col>
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">休暇日数</div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                </div>
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">休暇日数</div>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalVacation}
                   </div>
-                </Col>
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">遅刻回数</div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                </div>
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">遅刻回数</div>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalLate}
                   </div>
-                </Col>
-                <Col xs={4} sm={3} md={3} lg={true} className="mb-2">
-                  <div className="fw-bold text-secondary">早退回数</div>
-                  <div className={`ps-3 fw-bold fs-4 ${styles.totalColor}`}>
+                </div>
+                <div className="mb-2">
+                  <div className="font-bold text-secondary">早退回数</div>
+                  <div
+                    className={`ps-3 font-bold text-2xl ${styles.totalColor}`}
+                  >
                     {totalLeaveEarly}
                   </div>
-                </Col>
-              </Row>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </>
   );
 }

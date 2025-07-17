@@ -10,16 +10,6 @@ import React, {
   useContext,
   useState,
 } from "react";
-import {
-  Accordion,
-  Alert,
-  Button,
-  Col,
-  Container,
-  Dropdown,
-  Form,
-  Row,
-} from "react-bootstrap";
 import ModalConfirm from "@/components/modal/ModalConfirm";
 import { MODALMESSAGE } from "@/lib/modalMessage";
 import { useWindowSize } from "@/lib/useWindowSize";
@@ -28,6 +18,27 @@ import { setCookie } from "cookies-next";
 import { TypeMonthlyAttendance } from "@/types/attendance";
 import ModalSettlement from "../manage/status/ModalSettlement";
 import { Employee } from "@prisma/client";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Props = {
   employee: Employee; // メンバー情報
@@ -86,67 +97,76 @@ export default function Header({
           setErrorCode,
         }}
       >
-        <Container className="mb-1 px-1">
+        <div className="mb-1 px-1">
           {editable &&
             attendanceData.approvalStatus ===
               ApprovalStatusAttendance.approved.code && (
-              <Row className="px-3">
-                <Alert variant={MESSAGE.IM0001.kind}>
-                  {MESSAGE.IM0001.message}
+              <div className="px-3">
+                <Alert>
+                  <AlertDescription>{MESSAGE.IM0001.message}</AlertDescription>
                 </Alert>
-              </Row>
+              </div>
             )}
           {editable &&
             attendanceData.approvalStatus ===
               ApprovalStatusAttendance.reinput.code && (
-              <Row className="px-3">
-                <Alert variant={MESSAGE.WM0001.kind}>
-                  {MESSAGE.WM0001.message}
+              <div className="px-3">
+                <Alert>
+                  <AlertDescription>{MESSAGE.WM0001.message}</AlertDescription>
                 </Alert>
-              </Row>
+              </div>
             )}
           {inputCheck && (
-            <Row className="px-3">
-              <Alert variant={MESSAGE[inputCheck].kind}>
-                {MESSAGE[inputCheck].message}
+            <div className="px-3">
+              <Alert>
+                <AlertDescription>
+                  {MESSAGE[inputCheck].message}
+                </AlertDescription>
               </Alert>
-            </Row>
+            </div>
           )}
           {errorCode && (
-            <Row className="px-3">
-              <Alert variant={MESSAGE[errorCode].kind}>
-                {MESSAGE[errorCode].message}
+            <div className="px-3">
+              <Alert>
+                <AlertDescription>
+                  {MESSAGE[errorCode].message}
+                </AlertDescription>
               </Alert>
-            </Row>
+            </div>
           )}
 
           {width < 992 ? (
             <>
-              <div className="d-flex justify-content-end pb-2">
+              <div className="flex justify-end pb-2">
                 {editable && (
-                  <Button variant="info" onClick={handleOpenSettlement}>
+                  <Button variant="secondary" onClick={handleOpenSettlement}>
                     交通費精算閲覧
                   </Button>
                 )}
               </div>
-              <Accordion className="mb-4" defaultActiveKey="0">
-                <Accordion.Item eventKey="0">
-                  <Accordion.Header>
+              <Accordion
+                type="single"
+                collapsible
+                className="mb-4"
+                defaultValue="0"
+              >
+                <AccordionItem value="0">
+                  <AccordionTrigger>
                     <div>
                       <h5>基本情報</h5>
                     </div>
-                  </Accordion.Header>
-                  <Accordion.Body>
+                  </AccordionTrigger>
+                  <AccordionContent>
                     <HeaderDetailComponent />
-                  </Accordion.Body>
-                </Accordion.Item>
+                  </AccordionContent>
+                </AccordionItem>
               </Accordion>
             </>
           ) : (
             <>
               {editable && (
-                <div className="d-flex justify-content-end pe-3 mb-3">
-                  <Button variant="info" onClick={handleOpenSettlement}>
+                <div className="flex justify-end pe-3 mb-3">
+                  <Button variant="secondary" onClick={handleOpenSettlement}>
                     交通費精算閲覧
                   </Button>
                 </div>
@@ -154,7 +174,7 @@ export default function Header({
               <HeaderDetailComponent />
             </>
           )}
-        </Container>
+        </div>
       </HeaderContext.Provider>
       <ModalSettlement
         settlementModalOpenFlg={settlementModalOpenFlg}
@@ -189,20 +209,20 @@ function HeaderDetailComponent() {
 
   return (
     <>
-      <Row>
-        <Col xs={6} sm={4} lg={2} className="mb-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="mb-2">
           <div className="report-header-title-name">メンバー番号</div>
           <span className="report-header-title-value">{employee.id}</span>
-        </Col>
-        <Col xs={6} sm={4} lg={2} className="mb-2">
+        </div>
+        <div className="mb-2">
           <div className="report-header-title-name">氏名</div>
           <span className="report-header-title-value">{employee.name}</span>
-        </Col>
-        <Col xs={6} sm={4} lg={3} className="mb-2">
+        </div>
+        <div className="mb-2">
           <div className="report-header-title-name">所属</div>
           <span className="report-header-title-value">{employee.section}</span>
-        </Col>
-        <Col xs={6} sm={4} lg={2} className="mb-2">
+        </div>
+        <div className="mb-2">
           {editable ? (
             <>
               <div className="report-header-title-name">ステータス</div>
@@ -213,32 +233,36 @@ function HeaderDetailComponent() {
           ) : (
             <></>
           )}
-        </Col>
-        <Col xs={6} sm={4} lg={2}>
+        </div>
+        <div>
           <div className="report-header-title-name">入力月</div>
-          <div className="d-flex align-items-center">
+          <div className="flex items-center">
             {editable ? (
               <>
-                <Form.Select
-                  onChange={(e) => setTargetyearMonth!(e.target.value)}
-                  className="mx-2 w-100"
+                <Select
+                  onValueChange={(value) => setTargetyearMonth!(value)}
                   value={attendanceData.yearMonth}
                 >
-                  {monthsList.map((item, index) => (
-                    <option key={index} value={item.value}>
-                      {item.caption}
-                    </option>
-                  ))}
-                </Form.Select>
+                  <SelectTrigger className="mx-2 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {monthsList.map((item, index) => (
+                      <SelectItem key={index} value={item.value}>
+                        {item.caption}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </>
             ) : (
-              <div className="fs-5">
+              <div className="text-lg">
                 {dayjs(attendanceData.yearMonth).format("YYYY年MM月")}
               </div>
             )}
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 }
@@ -299,29 +323,33 @@ function ApprovalButton() {
     approvalStatus === ApprovalStatusAttendance.unapproved.code
   ) {
     button = (
-      <Dropdown>
-        <Dropdown.Toggle variant="secondary" disabled>
-          {ApprovalStatusAttendance.unapproved.caption}
-        </Dropdown.Toggle>
-      </Dropdown>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" disabled>
+            {ApprovalStatusAttendance.unapproved.caption}
+          </Button>
+        </DropdownMenuTrigger>
+      </DropdownMenu>
     );
 
     // 承認状況 = 入力中
   } else if (approvalStatus === ApprovalStatusAttendance.input.code) {
     button = (
       <>
-        <Dropdown>
-          <Dropdown.Toggle variant={inputCheck ? "secondary" : "info"}>
-            {ApprovalStatusAttendance.input.caption}
-          </Dropdown.Toggle>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={inputCheck ? "secondary" : "default"}>
+              {ApprovalStatusAttendance.input.caption}
+            </Button>
+          </DropdownMenuTrigger>
           {!inputCheck && (
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={handleOpenConfirmModal}>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={handleOpenConfirmModal}>
                 管理本部へ提出
-              </Dropdown.Item>
-            </Dropdown.Menu>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           )}
-        </Dropdown>
+        </DropdownMenu>
         <ModalConfirm
           modalMessage={MODALMESSAGE.MM00001}
           show={modalShow}
@@ -336,38 +364,40 @@ function ApprovalButton() {
     // 承認状況 = 提出済
   } else if (approvalStatus === ApprovalStatusAttendance.approvalPending.code) {
     button = (
-      <Dropdown>
-        <Dropdown.Toggle variant="primary">
-          {ApprovalStatusAttendance.approvalPending.caption}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button>{ApprovalStatusAttendance.approvalPending.caption}</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
             onClick={() =>
               handleUpdateApproval(ApprovalStatusAttendance.input.code)
             }
           >
             入力訂正
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
 
     // 承認状況 = 入力ミスにより差戻、再修正中
   } else if (approvalStatus === ApprovalStatusAttendance.reinput.code) {
     button = (
       <>
-        <Dropdown>
-          <Dropdown.Toggle variant={inputCheck ? "secondary" : "warning"}>
-            {ApprovalStatusAttendance.reinput.caption}
-          </Dropdown.Toggle>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={inputCheck ? "secondary" : "destructive"}>
+              {ApprovalStatusAttendance.reinput.caption}
+            </Button>
+          </DropdownMenuTrigger>
           {!inputCheck && (
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={handleOpenConfirmModal}>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={handleOpenConfirmModal}>
                 管理本部へ再提出
-              </Dropdown.Item>
-            </Dropdown.Menu>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           )}
-        </Dropdown>
+        </DropdownMenu>
 
         <ModalConfirm
           modalMessage={MODALMESSAGE.MM00002}
@@ -387,21 +417,25 @@ function ApprovalButton() {
     approvalStatus === ApprovalStatusAttendance.reApprovalPending.code
   ) {
     button = (
-      <Dropdown>
-        <Dropdown.Toggle variant="primary" disabled>
-          {ApprovalStatusAttendance.reApprovalPending.caption}
-        </Dropdown.Toggle>
-      </Dropdown>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button disabled>
+            {ApprovalStatusAttendance.reApprovalPending.caption}
+          </Button>
+        </DropdownMenuTrigger>
+      </DropdownMenu>
     );
 
     // 承認状況 = 管理本部の承認済
   } else if (approvalStatus === ApprovalStatusAttendance.approved.code) {
     button = (
-      <Dropdown>
-        <Dropdown.Toggle variant="success" disabled>
-          {ApprovalStatusAttendance.approved.caption}
-        </Dropdown.Toggle>
-      </Dropdown>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" disabled>
+            {ApprovalStatusAttendance.approved.caption}
+          </Button>
+        </DropdownMenuTrigger>
+      </DropdownMenu>
     );
   }
 

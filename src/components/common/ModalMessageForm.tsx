@@ -2,12 +2,22 @@ import { Employee } from "@prisma/client";
 import axios from "axios";
 import "flatpickr/dist/flatpickr.min.css";
 import { JSX, useEffect, useRef, useState } from "react";
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
 import { IoIosMail } from "react-icons/io";
 import styles from "@/styles/MessageForm.module.css";
 import { FaTimesCircle } from "react-icons/fa";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Props = {
   address?: number[]; // 宛先
@@ -26,7 +36,6 @@ export default function ModalMessageForm({
 }: Props) {
   const [title, setTitle] = useState<string>(""); // タイトル
   const [content, setContent] = useState<string>(""); // 内容
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [msg, setMsg] = useState<JSX.Element>(<></>);
 
   const employeeInfoRef = useRef<Employee[]>([]); // 最新の employeeInfo を保持
@@ -151,13 +160,21 @@ export default function ModalMessageForm({
       .then((res) => {
         if (res.status === 200) {
           setMsg(
-            <Alert variant="success">メッセージの送信が完了しました。</Alert>
+            <Alert>
+              <AlertDescription>
+                メッセージの送信が完了しました。
+              </AlertDescription>
+            </Alert>
           );
         }
       })
       .catch((err) => {
         console.error(err);
-        setMsg(<Alert variant="danger">課題の更新に失敗しました。</Alert>);
+        setMsg(
+          <Alert variant="destructive">
+            <AlertDescription>課題の更新に失敗しました。</AlertDescription>
+          </Alert>
+        );
       })
       .finally(() => {
         setTimeout(() => {
@@ -186,37 +203,31 @@ export default function ModalMessageForm({
 
   return (
     <>
-      <Modal show={messageModalOpenFlg} onHide={handleCLose} centered size="xl">
-        <Modal.Header
-          closeButton
-          closeVariant="white"
-          className={styles.modalHeader}
-          style={{ color: "#fff" }}
-        >
-          <Modal.Title className="d-flex align-items-center gap-2">
-            <IoIosMail />
-            <span>Slackメッセージ送信Form</span>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            <Form.Group as={Col} className="mb-4">
-              <Form.Label className="fs-5">タイトル</Form.Label>
-              <div>
-                <input
-                  className={styles.commonFormInput}
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-            </Form.Group>
-          </Row>
-          <Row className="mb-4">
-            <Form.Group as={Col}>
-              <Form.Label className="fs-5">宛先</Form.Label>
+      <Dialog open={messageModalOpenFlg} onOpenChange={handleCLose}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader
+            className={styles.modalHeader}
+            style={{ color: "#fff" }}
+          >
+            <DialogTitle className="flex items-center gap-2">
+              <IoIosMail />
+              <span>Slackメッセージ送信Form</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Label className="text-lg">タイトル</Label>
+              <Input
+                className={styles.commonFormInput}
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-lg">宛先</Label>
               <div className={styles.mentionBox} ref={addressRef}>
-                <input
+                <Input
                   type="text"
                   value={addressText}
                   onFocus={() => setShowAddressListFlg(true)}
@@ -270,36 +281,32 @@ export default function ModalMessageForm({
                   );
                 })}
               </div>
-            </Form.Group>
-          </Row>
-          <Row>
-            <Form.Group as={Col}>
-              <Form.Label className="fs-5">内容</Form.Label>
-              <div>
-                <textarea
-                  ref={messageFormRef}
-                  onInput={hangleMesageFormInput}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className={styles.commonFormTextarea}
-                />
-              </div>
-            </Form.Group>
-          </Row>
-        </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-end">
-          <Button
-            variant="success"
-            size="lg"
-            onClick={handlePostMessage}
-            disabled={
-              title === "" || content === "" || selectAddressList.length === 0
-            }
-          >
-            送信
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-lg">内容</Label>
+              <Textarea
+                ref={messageFormRef}
+                onInput={hangleMesageFormInput}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className={styles.commonFormTextarea}
+              />
+            </div>
+            {msg}
+          </div>
+          <DialogFooter className="flex justify-end">
+            <Button
+              size="lg"
+              onClick={handlePostMessage}
+              disabled={
+                title === "" || content === "" || selectAddressList.length === 0
+              }
+            >
+              送信
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

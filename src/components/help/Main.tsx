@@ -24,6 +24,8 @@ import {
   BsPersonBoundingBox,
   BsFillPersonVcardFill,
 } from "react-icons/bs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 // ページを追加したらここにもコンポーネント情報を追加
 const displayItems = [

@@ -3,17 +3,7 @@ import axios from "axios";
 import dayjs from "@/lib/dayjs";
 import "flatpickr/dist/flatpickr.min.css";
 import { Japanese } from "flatpickr/dist/l10n/ja.js";
-import React, { ChangeEvent, Dispatch, JSX, SetStateAction } from "react";
-import {
-  Alert,
-  Button,
-  Col,
-  Form,
-  Row,
-  Toast,
-  ToastContainer,
-} from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
+import React, { Dispatch, JSX, SetStateAction } from "react";
 import FlatPickr from "react-flatpickr";
 import { KeyedMutator } from "swr";
 import TimeList15 from "../common/TimeList15";
@@ -22,6 +12,26 @@ import { MESSAGE } from "../../lib/message";
 import { TypeMonthlyAttendance } from "@/types/attendance";
 import { Employee } from "@prisma/client";
 import { BsWrenchAdjustableCircle } from "react-icons/bs";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type Props = {
   show: boolean;
@@ -111,7 +121,6 @@ export default function ModalAllModify({
     setAbsentCodeModify(false);
     setNoteModify(false);
   };
-  const modalProps = { show, onHide };
 
   const hideElement = () => {
     setAlert(<></>);
@@ -143,8 +152,8 @@ export default function ModalAllModify({
       })
       .catch((err) => {
         setAlert(
-          <Alert variant={MESSAGE.EM00000.kind}>
-            {MESSAGE.EM00000.message}
+          <Alert>
+            <AlertDescription>{MESSAGE.EM00000.message}</AlertDescription>
           </Alert>
         );
         setTimeout(hideElement, 5000);
@@ -173,10 +182,10 @@ export default function ModalAllModify({
   };
 
   // 区分変更時
-  const handleChangeaAbsent = (e: ChangeEvent<HTMLSelectElement>) => {
-    setAbsentCode(e.target.value);
+  const handleChangeaAbsent = (value: string) => {
+    setAbsentCode(value);
 
-    if (AbsentData[getAbsentDataKey(e.target.value)].allday) {
+    if (AbsentData[getAbsentDataKey(value)].allday) {
       setStartTime(employee.startTime);
       setEndTime(employee.endTime);
       setRest("1.00");
@@ -190,273 +199,260 @@ export default function ModalAllModify({
   };
 
   return (
-    <>
-      <Modal {...modalProps} centered>
-        <Modal.Header
-          closeButton
-          closeVariant="white"
-          className="bg-dark"
-          style={{ color: "#fff" }}
-        >
-          <Modal.Title className="d-flex align-items-center">
+    <Dialog open={show} onOpenChange={onHide}>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader className="bg-dark" style={{ color: "#fff" }}>
+          <DialogTitle className="flex items-center">
             <BsWrenchAdjustableCircle />
             <span className="ms-2">一括修正</span>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>{alert}</div>
-          <Form>
-            <Row className="mb-2">
-              <Form.Group className="d-flex justify-content-between align-items-center">
-                <Form.Switch
-                  label="特定の日付のみ修正する"
-                  onChange={() => {
-                    setTargetDates([]);
-                    setIdentificationModify(!identificationModify);
+          </DialogTitle>
+        </DialogHeader>
+        <div>{alert}</div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={identificationModify}
+                onCheckedChange={() => {
+                  setTargetDates([]);
+                  setIdentificationModify(!identificationModify);
+                }}
+                id="identification-switch"
+              />
+              <Label htmlFor="identification-switch">
+                特定の日付のみ修正する
+              </Label>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setDispAttention(!dispAttention)}
+              className="px-2 py-1 rounded-full"
+            >
+              注意事項
+            </Button>
+          </div>
+          {dispAttention && (
+            <Alert>
+              <AlertDescription>
+                <div className="mb-2">
+                  ・修正したい項目にチェックと値を入れてください。
+                </div>
+                <div className="mb-2">
+                  ・休暇日を除いた登録済の日付全てを上書き修正します。※一括削除は休暇日も含みます。
+                </div>
+                <div className="mb-2">
+                  ・休暇日の修正は個別に行ってください。
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+          <div className="space-y-2">
+            <Label>日付</Label>
+            <FlatPickr
+              disabled={!identificationModify}
+              value={!identificationModify ? "" : targetDates}
+              onChange={(value) => setTargetDates(value)}
+              className="form-control w-50"
+              options={{
+                disable: noEntryDates,
+                minDate: firstDayOfMonth,
+                maxDate: lastDayOfMonth,
+                dateFormat: "Y/m/d",
+                locale: Japanese,
+                mode: "multiple",
+              }}
+            />
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label>開始時刻</Label>
+                <Checkbox
+                  checked={startTimeModify}
+                  onCheckedChange={() => {
+                    setStartTime(employee.startTime);
+                    setStartTimeModify(!startTimeModify);
                   }}
+                  disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-                <button
-                  type="button"
-                  className="bi bi-exclamation-diamond border px-2 py-1 bg-white rounded-pill"
-                  onClick={() => setDispAttention(!dispAttention)}
-                >
-                  注意事項
-                </button>
-                <ToastContainer position="top-center">
-                  <Toast
-                    bg="light"
-                    show={dispAttention}
-                    onClose={() => setDispAttention(!dispAttention)}
-                  >
-                    <Toast.Header className="px-3">
-                      <strong className="me-auto">注意事項</strong>
-                    </Toast.Header>
-                    <Toast.Body>
-                      <div className="d-flex mb-2">
-                        <span className="me-2">・</span>
-                        <span>
-                          修正したい項目にチェックと値を入れてください。
-                        </span>
-                      </div>
-                      <div className="d-flex mb-2">
-                        <span className="me-2">・</span>
-                        <span>
-                          休暇日を除いた登録済の日付全てを上書き修正します。&nbsp;※一括削除は休暇日も含みます。
-                        </span>
-                      </div>
-                      <div className="d-flex mb-2">
-                        <span className="me-2">・</span>
-                        <span>休暇日の修正は個別に行ってください。</span>
-                      </div>
-                    </Toast.Body>
-                  </Toast>
-                </ToastContainer>
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <Form.Label>日付</Form.Label>
-                <FlatPickr
-                  disabled={!identificationModify}
-                  value={!identificationModify ? "" : targetDates}
-                  onChange={(value) => setTargetDates(value)}
-                  className="form-control w-50"
-                  options={{
-                    disable: noEntryDates,
-                    minDate: firstDayOfMonth,
-                    maxDate: lastDayOfMonth,
-                    dateFormat: "Y/m/d",
-                    locale: Japanese,
-                    mode: "multiple",
+              </div>
+              <Input
+                type="time"
+                value={startTime}
+                list="data-list-start-15"
+                onChange={(e) => setStartTime(e.target.value)}
+                step={900}
+                disabled={!startTimeModify}
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label>終了時刻</Label>
+                <Checkbox
+                  checked={endTimeModify}
+                  onCheckedChange={() => {
+                    setEndTime(employee.endTime);
+                    setEndTimeModify(!endTimeModify);
                   }}
+                  disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <div className="d-flex">
-                  <Form.Label className="me-2">開始時刻</Form.Label>
-                  <Form.Check
-                    disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
-                    checked={startTimeModify}
-                    onChange={() => {
-                      setStartTime(employee.startTime);
-                      setStartTimeModify(!startTimeModify);
-                    }}
-                  />
-                </div>
-                <Form.Control
-                  type="time"
-                  value={startTime}
-                  list="data-list-start-15"
-                  onChange={(e) => setStartTime(e.target.value)}
-                  step={900}
-                  disabled={!startTimeModify}
+              </div>
+              <Input
+                type="time"
+                value={endTime}
+                list="data-list-end-15"
+                onChange={(e) => setEndTime(e.target.value)}
+                step={900}
+                disabled={!endTimeModify}
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label>休憩</Label>
+                <Checkbox
+                  checked={restModify}
+                  onCheckedChange={() => {
+                    setRest("1.00");
+                    setRestModify(!restModify);
+                  }}
+                  disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <div className="d-flex">
-                  <Form.Label className="me-2">終了時刻</Form.Label>
-                  <Form.Check
-                    disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
-                    checked={endTimeModify}
-                    onChange={() => {
-                      setEndTime(employee.endTime);
-                      setEndTimeModify(!endTimeModify);
-                    }}
-                  />
-                </div>
-                <Form.Control
-                  type="time"
-                  value={endTime}
-                  list="data-list-end-15"
-                  onChange={(e) => setEndTime(e.target.value)}
-                  step={900}
-                  disabled={!endTimeModify}
+              </div>
+              <Input
+                type="number"
+                value={rest}
+                onChange={(e) => setRest(e.target.value)}
+                placeholder="ex:1.00"
+                step="0.25"
+                disabled={!restModify}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label>勤務形態</Label>
+                <Checkbox
+                  checked={workStyleModify}
+                  onCheckedChange={() => {
+                    setWorkStyle(
+                      WorkStyle[getWorkStyleKey(employee.basicWorkStyle)].code
+                    );
+                    setWorkStyleModify(!workStyleModify);
+                  }}
+                  disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <div className="d-flex">
-                  <Form.Label className="me-2">休憩</Form.Label>
-                  <Form.Check
-                    disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
-                    checked={restModify}
-                    onChange={() => {
-                      setRest("1.00");
-                      setRestModify(!restModify);
-                    }}
-                  />
-                </div>
-                <Form.Control
-                  type="number"
-                  value={rest}
-                  onChange={(e) => setRest(e.target.value)}
-                  placeholder="ex:1.00"
-                  step="0.25"
-                  disabled={!restModify}
-                />
-              </Form.Group>
-            </Row>
-            <Row>
-              <Form.Group className="mb-3" as={Col}>
-                <div className="d-flex">
-                  <Form.Label className="me-2">勤務形態</Form.Label>
-                  <Form.Check
-                    disabled={AbsentData[getAbsentDataKey(absentCode)].allday}
-                    checked={workStyleModify}
-                    onChange={() => {
-                      setWorkStyle(
-                        WorkStyle[getWorkStyleKey(employee.basicWorkStyle)].code
-                      );
-                      setWorkStyleModify(!workStyleModify);
-                    }}
-                  />
-                </div>
-                <Form.Select
-                  value={workStyle}
-                  onChange={(e) => setWorkStyle(e.target.value)}
-                  disabled={!workStyleModify}
-                >
+              </div>
+              <Select
+                value={workStyle}
+                onValueChange={(value) => setWorkStyle(value)}
+                disabled={!workStyleModify}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
                   {Object.values(WorkStyle).map((obj) => {
                     const workStyleObj =
                       obj as import("@/types/types").TypeWorkStyle[keyof import("@/types/types").TypeWorkStyle];
                     return (
-                      <option key={workStyleObj.code} value={workStyleObj.code}>
+                      <SelectItem
+                        key={workStyleObj.code}
+                        value={workStyleObj.code}
+                      >
                         {workStyleObj.mean}
-                      </option>
+                      </SelectItem>
                     );
                   })}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3" as={Col}>
-                <div className="d-flex">
-                  <Form.Label className="me-2">区分</Form.Label>
-                  <Form.Check
-                    checked={absentCodeModify}
-                    onChange={() => {
-                      setAbsentCode(AbsentData.none.code);
-                      setAbsentCodeModify(!absentCodeModify);
-                    }}
-                  />
-                </div>
-                <Form.Select
-                  value={absentCode}
-                  onChange={(e) => handleChangeaAbsent(e)}
-                  disabled={!absentCodeModify}
-                >
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Label>区分</Label>
+                <Checkbox
+                  checked={absentCodeModify}
+                  onCheckedChange={() => {
+                    setAbsentCode(AbsentData.none.code);
+                    setAbsentCodeModify(!absentCodeModify);
+                  }}
+                />
+              </div>
+              <Select
+                value={absentCode}
+                onValueChange={handleChangeaAbsent}
+                disabled={!absentCodeModify}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
                   {Object.values(AbsentData).map((ab) => {
                     const absentObj =
                       ab as import("@/types/types").TypeAbsentData[keyof import("@/types/types").TypeAbsentData];
                     return (
-                      <option key={absentObj.code} value={absentObj.code}>
+                      <SelectItem key={absentObj.code} value={absentObj.code}>
                         {absentObj.caption}
-                      </option>
+                      </SelectItem>
                     );
                   })}
-                </Form.Select>
-              </Form.Group>
-            </Row>
-
-            <Row>
-              <Form.Group className="mb-4" as={Col}>
-                <div className="d-flex">
-                  <Form.Label className="me-2">備考</Form.Label>
-                  <Form.Check
-                    checked={noteModify}
-                    onChange={() => {
-                      setNote("");
-                      setNoteModify(!noteModify);
-                    }}
-                  />
-                </div>
-                <Form.Control
-                  type="text"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder="休暇等の補足情報"
-                  disabled={!noteModify}
-                />
-              </Form.Group>
-            </Row>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer className="justify-content-between">
-          <div>
-            <Button
-              disabled={identificationModify && targetDates.length === 0}
-              variant={
-                identificationModify && targetDates.length === 0
-                  ? "secondary"
-                  : "danger"
-              }
-              onClick={handleDelete}
-              size="lg"
-            >
-              一括削除
-            </Button>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <div>
-            <Button
-              disabled={
-                (identificationModify && targetDates.length === 0) ||
-                enteredAlldayFalseDates.length === 0
-              }
-              variant={
-                (identificationModify && targetDates.length === 0) ||
-                enteredAlldayFalseDates.length === 0
-                  ? "secondary"
-                  : "primary"
-              }
-              onClick={handleSubmit}
-              className="px-5"
-              size="lg"
-            >
-              一括登録
-            </Button>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Label>備考</Label>
+              <Checkbox
+                checked={noteModify}
+                onCheckedChange={() => {
+                  setNote("");
+                  setNoteModify(!noteModify);
+                }}
+              />
+            </div>
+            <Input
+              type="text"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="休暇等の補足情報"
+              disabled={!noteModify}
+            />
           </div>
-        </Modal.Footer>
-      </Modal>
+        </div>
+        <DialogFooter className="justify-between mt-4">
+          <Button
+            disabled={identificationModify && targetDates.length === 0}
+            variant={
+              identificationModify && targetDates.length === 0
+                ? "secondary"
+                : "destructive"
+            }
+            onClick={handleDelete}
+            size="lg"
+          >
+            一括削除
+          </Button>
+          <Button
+            disabled={
+              (identificationModify && targetDates.length === 0) ||
+              enteredAlldayFalseDates.length === 0
+            }
+            variant={
+              (identificationModify && targetDates.length === 0) ||
+              enteredAlldayFalseDates.length === 0
+                ? "secondary"
+                : "default"
+            }
+            onClick={handleSubmit}
+            size="lg"
+          >
+            一括修正
+          </Button>
+        </DialogFooter>
+      </DialogContent>
       <TimeList15 />
-    </>
+    </Dialog>
   );
 }

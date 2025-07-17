@@ -11,7 +11,8 @@ import { getCookie, deleteCookie } from "cookies-next";
 import useSWR, { Fetcher } from "swr";
 import { TypeMonthlyAttendance } from "@/types/attendance";
 import axios from "axios";
-import { Alert, Spinner } from "react-bootstrap";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type APIError = Error & {
@@ -66,12 +67,20 @@ export default function AttendanceMain() {
   useEffect(() => {
     if (error) {
       if (error.code === "NO_APPROVAL_RECORD") {
-        setAlert(<Alert variant="warning">{error.message}</Alert>);
+        setAlert(
+          <Alert>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        );
         setTimeout(() => {
           router.push("/");
         }, 3000);
       } else {
-        setAlert(<Alert variant="warning">{error.message}</Alert>);
+        setAlert(
+          <Alert>
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        );
       }
     }
   }, [error, router]);
@@ -85,10 +94,10 @@ export default function AttendanceMain() {
   // データ取得中はローディング
   if (sessionStatus === "loading" || isLoading || !data) {
     return (
-      <div className="w-100 h-100 px-4 pt-3">
+      <div className="w-full h-full px-4 pt-3">
         {error && alert}
-        <div className="w-100 h-100 d-flex justify-content-center align-items-center">
-          <Spinner animation="border" role="status" />
+        <div className="w-full h-full flex justify-center items-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       </div>
     );

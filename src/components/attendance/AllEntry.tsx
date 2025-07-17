@@ -3,7 +3,6 @@ import { isHoliday } from "@holiday-jp/holiday_jp";
 import axios from "axios";
 import dayjs from "@/lib/dayjs";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { KeyedMutator } from "swr";
 import TimeList15 from "../common/TimeList15";
 import styles from "@/styles/Attendance.module.css";
@@ -12,6 +11,16 @@ import { TypeMonthlyAttendance } from "@/types/attendance";
 import ModalAllModify from "./ModalAllModify";
 import { Employee } from "@prisma/client";
 import { BsWrenchAdjustableCircle } from "react-icons/bs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
   employee: Employee;
@@ -99,7 +108,7 @@ export default function AllEntry({
 
   return (
     <>
-      <Container className="mb-4" fluid={width < 992 ? true : false}>
+      <div className={`mb-4 ${width < 992 ? "w-full" : ""}`}>
         <div className={styles.accordion}>
           <div
             className={`${styles.contentBox} ${isActive ? styles.active : ""}`}
@@ -132,114 +141,118 @@ export default function AllEntry({
               </div>
             </div>
             <div className={styles.content}>
-              <Form>
-                <Row className="align-items-center pb-2">
-                  <Col xs={12} sm={12} md={6} lg={4} xl={4} className="pt-1">
-                    <Form.Label
-                      className="fw-bold"
-                      style={{ color: `var(--header-color)` }}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center pb-2">
+                <div className="space-y-2">
+                  <Label
+                    className="font-bold"
+                    style={{ color: `var(--header-color)` }}
+                  >
+                    勤務時間
+                  </Label>
+                  <div className="flex items-center">
+                    <Input
+                      className="w-full"
+                      type="time"
+                      value={workStartTime}
+                      list="data-list-start-15"
+                      onChange={(e) => setWorkStartTime(e.target.value)}
+                      step={900}
+                    />
+                    <span className="text-2xl px-2">~</span>
+                    <Input
+                      type="time"
+                      value={workEndTime}
+                      list="data-list-end-15"
+                      onChange={(e) => setWorkEndTime(e.target.value)}
+                      step={900}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    className="font-bold"
+                    style={{ color: `var(--header-color)` }}
+                  >
+                    休憩時間
+                  </Label>
+                  <Input
+                    type="number"
+                    value={restTime}
+                    onChange={(e) => setRestTime(e.target.value)}
+                    placeholder="1.00"
+                    step="0.25"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    className="font-bold"
+                    style={{ color: `var(--header-color)` }}
+                  >
+                    勤務形態
+                  </Label>
+                  <Select
+                    value={workStyle}
+                    onValueChange={(value) => setWorkStyle(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.values(WorkStyle).map((obj) => {
+                        const workStyleObj =
+                          obj as import("@/types/types").TypeWorkStyle[keyof import("@/types/types").TypeWorkStyle];
+                        return (
+                          <SelectItem
+                            key={workStyleObj.code}
+                            value={workStyleObj.code}
+                          >
+                            {workStyleObj.mean}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label></Label>
+                  <div className="flex justify-end space-x-2">
+                    <Button
+                      onClick={handleAllEntry}
+                      className="flex items-center"
                     >
-                      勤務時間
-                    </Form.Label>
-                    <Form.Group className="d-flex" as={Col}>
-                      <Form.Control
-                        className="w-100"
-                        type="time"
-                        value={workStartTime}
-                        list="data-list-start-15"
-                        onChange={(e) => setWorkStartTime(e.target.value)}
-                        step="900"
-                      />
-                      <span className="fs-4 px-2">~</span>
-                      <Form.Control
-                        type="time"
-                        value={workEndTime}
-                        list="data-list-end-15"
-                        onChange={(e) => setWorkEndTime(e.target.value)}
-                        step="900"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={6} sm={3} md={3} lg={2} xl={2} className="pt-1">
-                    <Form.Group className="fw-bold" as={Col}>
-                      <Form.Label style={{ color: `var(--header-color)` }}>
-                        休憩時間
-                      </Form.Label>
-                      <Form.Control
-                        type="number"
-                        value={restTime}
-                        onChange={(e) => setRestTime(e.target.value)}
-                        placeholder="1.00"
-                        step="0.25"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col xs={6} sm={3} md={3} lg={2} xl={2} className="pt-1">
-                    <Form.Group className="fw-bold" as={Col}>
-                      <Form.Label style={{ color: `var(--header-color)` }}>
-                        勤務形態
-                      </Form.Label>
-                      <Form.Select
-                        value={workStyle}
-                        onChange={(e) => setWorkStyle(e.target.value)}
-                      >
-                        {Object.values(WorkStyle).map((obj) => {
-                          const workStyleObj =
-                            obj as import("@/types/types").TypeWorkStyle[keyof import("@/types/types").TypeWorkStyle];
-                          return (
-                            <option
-                              key={workStyleObj.code}
-                              value={workStyleObj.code}
-                            >
-                              {workStyleObj.mean}
-                            </option>
-                          );
-                        })}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                  <Col xs={12} sm={6} md={12} lg={4} xl={4}>
-                    <Form.Label></Form.Label>
-                    <div className="d-flex justify-content-end">
-                      <Button
-                        variant="success"
-                        onClick={handleAllEntry}
-                        className="me-2 d-flex align-items-center"
-                      >
-                        <BsWrenchAdjustableCircle />
-                        <span className="ps-2">
-                          {width >= 768 && width < 1200 ? (
-                            <>登録</>
-                          ) : (
-                            <>一括登録</>
-                          )}
-                        </span>
-                      </Button>
-                      <Button
-                        disabled={!attendanceData?.list?.length}
-                        variant={
-                          attendanceData?.list?.length ? "dark" : "secondary"
-                        }
-                        onClick={() => setModalShow(true)}
-                        className="d-flex align-items-center"
-                      >
-                        <BsWrenchAdjustableCircle />
-                        <span className="ps-2">
-                          {width >= 768 && width < 1200 ? (
-                            <>修正</>
-                          ) : (
-                            <>一括修正</>
-                          )}
-                        </span>
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
-              </Form>
+                      <BsWrenchAdjustableCircle />
+                      <span className="ps-2">
+                        {width >= 768 && width < 1200 ? (
+                          <>登録</>
+                        ) : (
+                          <>一括登録</>
+                        )}
+                      </span>
+                    </Button>
+                    <Button
+                      disabled={!attendanceData?.list?.length}
+                      variant={
+                        attendanceData?.list?.length ? "secondary" : "outline"
+                      }
+                      onClick={() => setModalShow(true)}
+                      className="flex items-center"
+                    >
+                      <BsWrenchAdjustableCircle />
+                      <span className="ps-2">
+                        {width >= 768 && width < 1200 ? (
+                          <>修正</>
+                        ) : (
+                          <>一括修正</>
+                        )}
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </Container>
+      </div>
       <TimeList15 />
       <ModalAllModify
         show={modalShow}

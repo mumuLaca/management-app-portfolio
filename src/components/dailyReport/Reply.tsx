@@ -6,7 +6,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { createPortal } from "react-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { HiMiniPencilSquare } from "react-icons/hi2";
-import { Button } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
 import { CodeCRUD } from "@/lib/constants";
 import { GiCancel } from "react-icons/gi";
 import { Session } from "next-auth";

@@ -1,6 +1,5 @@
 "use client";
 
-import { Accordion, Card, Col, Container, Row } from "react-bootstrap";
 import {
   ApprovalStatusAttendance,
   ApprovalStatusReimbursement,
@@ -23,6 +22,13 @@ import { AiOutlineMoneyCollect } from "react-icons/ai";
 import { GoAlertFill } from "react-icons/go";
 import { AiFillAlert } from "react-icons/ai";
 import { IoIosNotifications } from "react-icons/io";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 /**
  * @description
@@ -231,36 +237,36 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
   };
 
   return (
-    <Container fluid>
-      <Row className={styles.statusRow}>
+    <div className="container-fluid">
+      <div className={styles.statusRow}>
         {initData &&
           initData.map((obj, index) => (
             <Card key={index} className={styles.statusCard}>
-              <Card.Body className="px-1 py-1">
-                <Card.Title className={styles.cardTitle}>
-                  <Card.Text className={styles.cardYM}>
+              <CardContent className="px-1 py-1">
+                <CardHeader className={styles.cardTitle}>
+                  <div className={styles.cardYM}>
                     <span>{obj.yearMonth.slice(0, 4)}</span>
                     <span className={styles.cardM}>
                       <span>/</span>
                       <span>{obj.yearMonth.substring(4)}</span>
                     </span>
-                  </Card.Text>
-                  <Card.Text className={styles.cardTextArea}>
+                  </div>
+                  <div className={styles.cardTextArea}>
                     <span className={styles.cardTextTitle}>稼働</span>
                     <span className={styles.cardTextValue}>
                       {getTotalActive(obj.yearMonth)}h
                     </span>
-                  </Card.Text>
-                </Card.Title>
-                <Accordion flush>
-                  <Accordion.Item eventKey="0" className={styles.accordionItem}>
-                    <Accordion.Header className={styles.accordionHeader}>
-                      <div className="w-100 d-flex align-items-top">
+                  </div>
+                </CardHeader>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="0" className={styles.accordionItem}>
+                    <AccordionTrigger className={styles.accordionHeader}>
+                      <div className="w-full flex items-top">
                         <span className={styles.accordionTitle}>承認状況</span>
                         {displayStatusAlert(obj)}
                       </div>
-                    </Accordion.Header>
-                    <Accordion.Body className={styles.accordionBody}>
+                    </AccordionTrigger>
+                    <AccordionContent className={styles.accordionBody}>
                       {(Object.values(ReportPattern) as any[]).map(
                         (rep, index) => (
                           <div key={index} className={styles.accordionDiv}>
@@ -277,15 +283,15 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
                           </div>
                         )
                       )}
-                    </Accordion.Body>
-                  </Accordion.Item>
+                    </AccordionContent>
+                  </AccordionItem>
                 </Accordion>
-              </Card.Body>
+              </CardContent>
             </Card>
           ))}
-      </Row>
-      <Row>
-        <Col className={styles.btnArea}>
+      </div>
+      <div>
+        <div className={styles.btnArea}>
           <Link
             href="/attendance"
             className={`${styles.btnCommon} ${styles.btnDR}`}
@@ -362,8 +368,8 @@ export default function HomeMain({ initData }: { initData: Approval[] }) {
               </span>
             </div>
           </Link>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -2,9 +2,16 @@
 
 import { MODALMESSAGEKINDCOLOR } from "@/lib/modalMessage";
 import React, { Dispatch, SetStateAction } from "react";
-import { Button, Modal } from "react-bootstrap";
 import parse from "html-react-parser";
 import type { ModalMessage } from "@/types/types";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 type Props = {
   modalMessage: ModalMessage;
@@ -29,7 +36,6 @@ export default function ModalConfirm({
   const onHide = () => {
     setModalShow(false);
   };
-  const modalProps = { show, onHide };
 
   /** 実行処理 */
   const clickHandler = async () => {
@@ -41,46 +47,51 @@ export default function ModalConfirm({
 
   return (
     <div>
-      <Modal {...modalProps} centered>
-        <Modal.Header
-          closeButton={modalMessage.closeBtnPresence}
-          closeVariant="white"
-          className={MODALMESSAGEKINDCOLOR[modalMessage.kind].backgroundColor}
-          style={{ color: "#fff" }}
-        >
-          <Modal.Title>
-            <i className={MODALMESSAGEKINDCOLOR[modalMessage.kind].icon}></i>
-            <span className="ms-2">{modalMessage.title}</span>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>{parse(modalMessage.message)}</div>
-        </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-between">
-          {modalMessage.btn2.dispOn && (
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => setModalShow(false)}
-            >
-              {modalMessage.btn2.words}
-            </Button>
-          )}
-          {modalMessage.btn1.dispOn ? (
-            <Button
-              variant={MODALMESSAGEKINDCOLOR[modalMessage.kind].btnColor}
-              className="fw-bold"
-              size="lg"
-              style={{ color: "#fff" }}
-              onClick={clickHandler}
-            >
-              {modalMessage.btn1.words}
-            </Button>
-          ) : (
-            <></>
-          )}
-        </Modal.Footer>
-      </Modal>
+      <Dialog open={show} onOpenChange={onHide}>
+        <DialogContent>
+          <DialogHeader
+            className={MODALMESSAGEKINDCOLOR[modalMessage.kind].backgroundColor}
+            style={{ color: "#fff" }}
+          >
+            <DialogTitle>
+              <i className={MODALMESSAGEKINDCOLOR[modalMessage.kind].icon}></i>
+              <span className="ms-2">{modalMessage.title}</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            <div>{parse(modalMessage.message)}</div>
+          </div>
+          <DialogFooter className="flex justify-between">
+            {modalMessage.btn2.dispOn && (
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={() => setModalShow(false)}
+              >
+                {modalMessage.btn2.words}
+              </Button>
+            )}
+            {modalMessage.btn1.dispOn ? (
+              <Button
+                variant={
+                  MODALMESSAGEKINDCOLOR[modalMessage.kind].btnColor ===
+                  "success"
+                    ? "default"
+                    : "destructive"
+                }
+                className="fw-bold"
+                size="lg"
+                style={{ color: "#fff" }}
+                onClick={clickHandler}
+              >
+                {modalMessage.btn1.words}
+              </Button>
+            ) : (
+              <></>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

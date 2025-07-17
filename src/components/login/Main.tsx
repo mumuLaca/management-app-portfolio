@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import slackIcon from "@/app/slackIcon.png";
 import styles from "@/styles/Login.module.css";
 import actIcon from "@/app/logo.png";
+import { Button } from "@/components/ui/button";
 
 /**
  * @description
@@ -21,7 +21,7 @@ export default function LoginMain() {
         <div className={styles.buttonContainer}>
           <Button
             onClick={() => signIn("slack", { callbackUrl: "/" })}
-            variant="outline-primary"
+            variant="outline"
             size="lg"
             className={styles.loginButton}
           >

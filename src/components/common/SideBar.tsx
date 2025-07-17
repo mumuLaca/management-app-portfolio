@@ -31,7 +31,7 @@ import {
   MdCardTravel,
   MdOutlineDevicesOther,
 } from "react-icons/md";
-import { Button } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
 
 /**
  * @description

@@ -1,7 +1,15 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Button, ButtonGroup, Offcanvas, ToggleButton } from "react-bootstrap";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import styles from "@/styles/Profile.module.css";
 import scrollStyles from "@/styles/CustomScroll.module.css";
 import { AdminRights, WorkStyle } from "@/lib/constants";
@@ -133,23 +141,18 @@ export default function Profile({
 
   return (
     <>
-      <Offcanvas
-        show={profileOpenFlg}
-        onHide={handleClose}
-        placement="end"
+      <Sheet
+        open={profileOpenFlg}
+        onOpenChange={handleClose}
         className={styles.offCanvasLayout}
       >
-        <Offcanvas.Header
-          closeButton
-          closeVariant="white"
-          className={styles.header}
-        >
-          <Offcanvas.Title className="d-flex align-items-center">
-            <BsPersonBoundingBox />
-            <span className="ps-2">プロフィール</span>
-          </Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body className={scrollStyles.attendanceScrollStyle}>
+        <SheetTrigger className={styles.header}>
+          <SheetTitle className="flex items-center">
+            <BsPersonBoundingBox className="mr-2 h-4 w-4" />
+            <span>プロフィール</span>
+          </SheetTitle>
+        </SheetTrigger>
+        <SheetContent className={scrollStyles.attendanceScrollStyle}>
           <div className={styles.mainComponent}>
             <div style={{ height: "100%" }}>
               <div className={styles.topItems}>
@@ -160,24 +163,27 @@ export default function Profile({
                   alt="NoImage"
                   className={styles.iconImage}
                 />
-                <ButtonGroup className="w-50 mb-3">
+                <div className="flex w-50 mb-3">
                   {radios.map((radio, idx) => (
-                    <ToggleButton
-                      key={idx}
-                      id={`radio-${idx}`}
-                      type="radio"
-                      variant={
-                        idx % 2 ? "outline-primary" : "outline-secondary"
-                      }
-                      name="radio"
-                      value={radio.value}
-                      checked={radioValue === radio.value}
-                      onChange={(e) => handleEditable(e.currentTarget.value)}
+                    <ToggleGroup
+                      type="single"
+                      value={radioValue}
+                      onValueChange={(value) => handleEditable(value)}
                     >
-                      {radio.name}
-                    </ToggleButton>
+                      <ToggleGroupItem
+                        value={radio.value}
+                        id={`radio-${idx}`}
+                        className={
+                          idx % 2
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary text-secondary-foreground"
+                        }
+                      >
+                        {radio.name}
+                      </ToggleGroupItem>
+                    </ToggleGroup>
                   ))}
-                </ButtonGroup>
+                </div>
               </div>
 
               <div className={styles.employeeInfo}>
@@ -237,27 +243,36 @@ export default function Profile({
                   勤務形態
                 </label>
                 <div className="pt-2 ps-2">
-                  <ButtonGroup className="w-75">
-                    {radiosWorkStyle.map((radio, idx) => (
-                      <ToggleButton
-                        key={idx}
-                        id={`wsRadio-${idx}`}
-                        type="radio"
-                        variant={
-                          isEditable ? "outline-primary" : "outline-dark"
-                        }
-                        disabled={isEditable ? false : true}
-                        name="wsRadio"
-                        value={radio.value}
-                        checked={workStyle === radio.value}
-                        onChange={(e) => {
-                          changeWorkStyle(e.currentTarget.value);
-                        }}
-                      >
-                        {radio.name}
-                      </ToggleButton>
-                    ))}
-                  </ButtonGroup>
+                  <ToggleGroup
+                    type="single"
+                    value={workStyle}
+                    onValueChange={(value) => changeWorkStyle(value)}
+                  >
+                    <ToggleGroupItem
+                      value={radiosWorkStyle[0].value}
+                      id={`wsRadio-0`}
+                      className={
+                        isEditable
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-secondary-foreground"
+                      }
+                      disabled={isEditable ? false : true}
+                    >
+                      {radiosWorkStyle[0].name}
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value={radiosWorkStyle[1].value}
+                      id={`wsRadio-1`}
+                      className={
+                        isEditable
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-secondary-foreground"
+                      }
+                      disabled={isEditable ? false : true}
+                    >
+                      {radiosWorkStyle[1].name}
+                    </ToggleGroupItem>
+                  </ToggleGroup>
                 </div>
               </div>
               <div>
@@ -276,8 +291,8 @@ export default function Profile({
               </div>
             </div>
           </div>
-        </Offcanvas.Body>
-      </Offcanvas>
+        </SheetContent>
+      </Sheet>
       <TimeList15 />
     </>
   );

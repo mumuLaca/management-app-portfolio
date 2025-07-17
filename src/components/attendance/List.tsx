@@ -10,9 +10,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Container } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
 import { KeyedMutator } from "swr";
 import {
   ApprovalStatusAttendance,
@@ -27,6 +24,15 @@ import AllEntry from "@/components/attendance/AllEntry";
 import ModalEntry from "./ModalEntry";
 import { Employee } from "@prisma/client";
 import type { WorkStyleKeys } from "@/types/types";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type Props = {
   employee: Employee;
@@ -166,11 +172,7 @@ export default function List({
       approvalStatus === ApprovalStatusAttendance.reinput.code
     ) {
       button = (
-        <Button
-          variant="primary"
-          className="w-100"
-          onClick={() => handleEntry(item)}
-        >
+        <Button className="w-full" onClick={() => handleEntry(item)}>
           {item.mday}
         </Button>
       );
@@ -180,24 +182,24 @@ export default function List({
 
     {
       itemListHTML.push(
-        <tr key={item.date} className={styles.tableRow}>
-          <td className={styles.tdDay} style={styleBackGround}>
+        <TableRow key={item.date} className={styles.tableRow}>
+          <TableCell className={styles.tdDay} style={styleBackGround}>
             {editable ? button : item.mday}
-          </td>
-          <td style={stylefbColor}>{item.wday}</td>
-          <td style={styleBackGround}>{item.startTime}</td>
-          <td style={styleBackGround}>{item.endTime}</td>
-          <td style={styleBackGround}>{item.rest}</td>
-          <td style={styleBackGround}>{item.active}</td>
-          <td style={styleBackGround}>{item.overTime}</td>
-          <td style={styleBackGround}>{item.lNOverTime}</td>
-          <td style={styleBackGround}>{item.legalHolActive}</td>
-          <td style={styleBackGround}>
+          </TableCell>
+          <TableCell style={stylefbColor}>{item.wday}</TableCell>
+          <TableCell style={styleBackGround}>{item.startTime}</TableCell>
+          <TableCell style={styleBackGround}>{item.endTime}</TableCell>
+          <TableCell style={styleBackGround}>{item.rest}</TableCell>
+          <TableCell style={styleBackGround}>{item.active}</TableCell>
+          <TableCell style={styleBackGround}>{item.overTime}</TableCell>
+          <TableCell style={styleBackGround}>{item.lNOverTime}</TableCell>
+          <TableCell style={styleBackGround}>{item.legalHolActive}</TableCell>
+          <TableCell style={styleBackGround}>
             {WorkStyle[item.workStyle as WorkStyleKeys].mean}
-          </td>
-          <td style={styleBackGround}>{item.absent}</td>
-          <td style={styleBackGround}>{item.note}</td>
-        </tr>
+          </TableCell>
+          <TableCell style={styleBackGround}>{item.absent}</TableCell>
+          <TableCell style={styleBackGround}>{item.note}</TableCell>
+        </TableRow>
       );
     }
   }
@@ -213,29 +215,36 @@ export default function List({
             mutateAttendance={mutateAttendance!}
           />
         )}
-      <Container fluid className={styles.tableContainer}>
-        <Table responsive>
-          <thead>
-            <tr className={styles.tableHeader}>
-              <th className={styles.thDay} style={{ minWidth: 50, width: 50 }}>
+      <div className={styles.tableContainer}>
+        <Table>
+          <TableHeader>
+            <TableRow className={styles.tableHeader}>
+              <TableHead
+                className={styles.thDay}
+                style={{ minWidth: 50, width: 50 }}
+              >
                 日付
-              </th>
-              <th style={{ minWidth: 60, width: 60 }}>曜日</th>
-              <th style={{ minWidth: 70, width: 70 }}>開始</th>
-              <th style={{ minWidth: 70, width: 70 }}>終了</th>
-              <th style={{ minWidth: 70, width: 70 }}>休憩</th>
-              <th style={{ minWidth: 70, width: 70 }}>実働</th>
-              <th style={{ minWidth: 70, width: 70 }}>残業</th>
-              <th style={{ minWidth: 85, width: 85 }}>深夜残業</th>
-              <th style={{ minWidth: 85, width: 85 }}>法定休日</th>
-              <th style={{ minWidth: 90, width: 90 }}>形態</th>
-              <th style={{ minWidth: 100, width: 100 }}>区分</th>
-              <th style={{ minWidth: 260, width: 260 }}>備考</th>
-            </tr>
-          </thead>
-          <tbody>{itemListHTML}</tbody>
+              </TableHead>
+              <TableHead style={{ minWidth: 60, width: 60 }}>曜日</TableHead>
+              <TableHead style={{ minWidth: 70, width: 70 }}>開始</TableHead>
+              <TableHead style={{ minWidth: 70, width: 70 }}>終了</TableHead>
+              <TableHead style={{ minWidth: 70, width: 70 }}>休憩</TableHead>
+              <TableHead style={{ minWidth: 70, width: 70 }}>実働</TableHead>
+              <TableHead style={{ minWidth: 70, width: 70 }}>残業</TableHead>
+              <TableHead style={{ minWidth: 85, width: 85 }}>
+                深夜残業
+              </TableHead>
+              <TableHead style={{ minWidth: 85, width: 85 }}>
+                法定休日
+              </TableHead>
+              <TableHead style={{ minWidth: 90, width: 90 }}>形態</TableHead>
+              <TableHead style={{ minWidth: 100, width: 100 }}>区分</TableHead>
+              <TableHead style={{ minWidth: 260, width: 260 }}>備考</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>{itemListHTML}</TableBody>
         </Table>
-      </Container>
+      </div>
       <ModalEntry
         entryModalOpenFlg={entryModalOpenFlg}
         setEntryModalOpenFlg={setEntryModalOpenFlg}
